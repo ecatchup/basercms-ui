@@ -23,14 +23,9 @@ export default defineConfig({
       },
     },
   },
-  // vitest@2.x が peerDependency として解決できる vite が ^5/^6 系のため、
-  // node_modules 直下に vitest 専用の vite@5 系が二重インストールされる。
-  // その結果「declare module 'vite'」による test オプションの型拡張が
-  // ルートの vite@7 系の型とは別モジュール扱いとなり適用されない。
-  // 実行時の挙動には影響がないため、この設定オブジェクト全体を any として渡す。
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: './vitest.setup.ts',
   },
-} as any);
+});
