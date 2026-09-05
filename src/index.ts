@@ -5,5 +5,7 @@ export { MultiSelectPicker } from './MultiSelectPicker/MultiSelectPicker';
 export type { MultiSelectPickerProps } from './MultiSelectPicker/MultiSelectPicker';
 export { MultiSelectDialog } from './MultiSelectDialog/MultiSelectDialog';
 export type { MultiSelectDialogProps } from './MultiSelectDialog/MultiSelectDialog';
+export { MultiSelectField } from './MultiSelectField/MultiSelectField';
+export type { MultiSelectFieldProps } from './MultiSelectField/MultiSelectField';
 import './styles/tokens.css';
 import './styles/components.css';

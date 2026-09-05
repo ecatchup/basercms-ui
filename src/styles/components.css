@@ -318,3 +318,32 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.cui-field {
+  font-size: var(--cui-font-size);
+}
+
+.cui-field__tags {
+  padding: 10px;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.cui-field__actions {
+  margin-top: 8px;
+}
+
+.cui-field__add {
+  padding: 4px 16px;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.cui-field__add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
