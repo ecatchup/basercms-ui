@@ -115,4 +115,27 @@ describe('MultiSelectDialog', () => {
     // ダイアログの外へフォーカスが抜けていないことも確認する
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
+
+  it('フォーカストラップ: 最初の要素で Shift+Tab を押すと最後の要素へ戻る', async () => {
+    const user = userEvent.setup();
+    render(<MultiSelectDialog open options={options} onSubmit={vi.fn()} onCancel={vi.fn()} />);
+
+    const dialog = screen.getByRole('dialog');
+    const focusable = Array.from(
+      dialog.querySelectorAll<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])')
+    ).filter((el) => !(el as HTMLButtonElement).disabled);
+
+    expect(focusable.length).toBeGreaterThan(0);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    first.focus();
+    expect(document.activeElement).toBe(first);
+
+    await user.tab({ shift: true });
+
+    expect(document.activeElement).toBe(last);
+    // ダイアログの外へフォーカスが抜けていないことも確認する
+    expect(dialog.contains(document.activeElement)).toBe(true);
+  });
 });
