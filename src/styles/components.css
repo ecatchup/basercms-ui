@@ -33,3 +33,128 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+.cui-select {
+  position: relative;
+  width: 100%;
+  font-size: var(--cui-font-size);
+}
+
+.cui-select__trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 4px 32px 4px 8px;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+  background-color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cui-select__trigger[data-disabled] {
+  background-color: #f4f4f4;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.cui-select__placeholder {
+  color: #999;
+}
+
+.cui-select__clear,
+.cui-select__arrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.cui-select__clear {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.cui-select__arrow {
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.cui-select__dropdown {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: var(--cui-z-index);
+  background-color: #fff;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cui-select__dropdown[data-placement='bottom'] {
+  top: 100%;
+}
+
+.cui-select__dropdown[data-placement='top'] {
+  bottom: 100%;
+}
+
+.cui-select__search {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.cui-select__search-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--cui-border);
+  border-radius: var(--cui-radius);
+}
+
+.cui-select__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.cui-select__option {
+  padding: 6px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.cui-select__option[data-active] {
+  background-color: var(--cui-accent-hover);
+}
+
+.cui-select__option[data-selected] {
+  background-color: var(--cui-accent);
+  font-weight: bold;
+}
+
+.cui-select__sublabel {
+  margin-left: 4px;
+  font-size: 0.8em;
+  color: #666;
+}
+
+.cui-select__no-results {
+  padding: 8px 12px;
+  color: #999;
+  text-align: center;
+}

@@ -1,0 +1,174 @@
+import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
+import type { SelectOption } from '../types';
+import { useFilteredOptions } from '../hooks/useFilteredOptions';
+import { useOutsideClick } from '../hooks/useOutsideClick';
+import { useDropdownPlacement } from '../hooks/useDropdownPlacement';
+
+export type SearchSelectProps = {
+  options: SelectOption[];
+  value: string | null;
+  onChange: (id: string | null) => void;
+  /** 指定時、hidden input を描画する */
+  name?: string;
+  placeholder?: string;
+  /** 指定時、「指定なし」相当の選択肢を先頭に出す */
+  emptyLabel?: string;
+  clearable?: boolean;
+  disabled?: boolean;
+  noResultsText?: string;
+  dropdownPlacement?: 'auto' | 'top' | 'bottom';
+  className?: string;
+};
+
+const EMPTY_ID = '';
+
+export const SearchSelect = ({
+  options,
+  value,
+  onChange,
+  name,
+  placeholder = '選択してください',
+  emptyLabel,
+  clearable = true,
+  disabled = false,
+  noResultsText = '一致する項目がありません',
+  dropdownPlacement = 'auto',
+  className = '',
+}: SearchSelectProps) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const filtered = useFilteredOptions(options, query);
+  const items: SelectOption[] = emptyLabel ? [{ id: EMPTY_ID, label: emptyLabel }, ...filtered] : filtered;
+  const selected = options.find((option) => option.id === value) ?? null;
+
+  useOutsideClick(wrapperRef, open, () => setOpen(false));
+  const placement = useDropdownPlacement(wrapperRef, open, dropdownPlacement);
+
+  // 閉じたら検索語と選択位置をリセットする
+  useEffect(() => {
+    if (!open) {
+      setQuery('');
+      setActiveIndex(0);
+    }
+  }, [open]);
+
+  // 開いたら検索欄へフォーカスする
+  useEffect(() => {
+    if (open) searchRef.current?.focus();
+  }, [open]);
+
+  const commit = (id: string) => {
+    onChange(id === EMPTY_ID ? null : id);
+    setOpen(false);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (disabled) return;
+    if (event.key === 'Escape') {
+      setOpen(false);
+      return;
+    }
+    if (!open) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter') {
+        event.preventDefault();
+        setOpen(true);
+      }
+      return;
+    }
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setActiveIndex((index) => Math.min(index + 1, items.length - 1));
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setActiveIndex((index) => Math.max(index - 1, 0));
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      const item = items[activeIndex];
+      if (item && !item.disabled) commit(item.id);
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className={`cui-select ${className}`.trim()} onKeyDown={handleKeyDown}>
+      {name && <input type="hidden" name={name} value={value ?? ''} />}
+
+      <div
+        role="combobox"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
+        className="cui-select__trigger"
+        data-disabled={disabled || undefined}
+        onClick={() => !disabled && setOpen(!open)}
+      >
+        <span className={selected ? 'cui-select__value' : 'cui-select__placeholder'}>
+          {selected ? selected.label : placeholder}
+        </span>
+        {!disabled && clearable && value ? (
+          <button
+            type="button"
+            className="cui-select__clear"
+            aria-label="選択を解除"
+            onClick={(event) => {
+              event.stopPropagation();
+              onChange(null);
+            }}
+          >
+            ×
+          </button>
+        ) : (
+          <span className="cui-select__arrow" aria-hidden="true">
+            ▼
+          </span>
+        )}
+      </div>
+
+      {open && (
+        <div className="cui-select__dropdown" data-placement={placement}>
+          <div className="cui-select__search">
+            <input
+              ref={searchRef}
+              type="text"
+              className="cui-select__search-input"
+              placeholder="検索..."
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveIndex(0);
+              }}
+              onClick={(event) => event.stopPropagation()}
+            />
+          </div>
+
+          <ul role="listbox" className="cui-select__list">
+            {items.length > 0 ? (
+              items.map((item, index) => (
+                <li
+                  key={item.id || '__empty__'}
+                  role="option"
+                  aria-selected={item.id === (value ?? EMPTY_ID)}
+                  className="cui-select__option"
+                  data-active={index === activeIndex || undefined}
+                  data-selected={item.id === (value ?? EMPTY_ID) || undefined}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onClick={() => commit(item.id)}
+                >
+                  <span className="cui-select__label">{item.label}</span>
+                  {item.sublabel && <span className="cui-select__sublabel">{`(${item.sublabel})`}</span>}
+                </li>
+              ))
+            ) : (
+              <li className="cui-select__no-results">{noResultsText}</li>
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
