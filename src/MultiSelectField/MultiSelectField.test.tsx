@@ -46,7 +46,7 @@ describe('MultiSelectField', () => {
   it('モーダルには選択済みを除いた選択肢だけを渡す', async () => {
     render(<MultiSelectField options={options} value={[options[0]]} onChange={vi.fn()} />);
     await userEvent.click(screen.getByRole('button', { name: '追加' }));
-    const list = screen.getByRole('list', { name: '選択可能な項目' });
+    const list = screen.getByRole('listbox', { name: '選択可能な項目' });
     expect(list).toHaveTextContent('利用者');
     expect(list).not.toHaveTextContent('managers');
   });

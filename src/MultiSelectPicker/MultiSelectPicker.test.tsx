@@ -20,7 +20,7 @@ describe('MultiSelectPicker', () => {
   it('検索語で絞り込まれる（sublabel も対象）', async () => {
     render(<MultiSelectPicker options={options} value={[]} onChange={vi.fn()} />);
     await userEvent.type(screen.getByPlaceholderText('検索...'), 'gw_10');
-    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+    expect(screen.getAllByRole('option')).toHaveLength(1);
   });
 
   it('一覧の項目をクリックすると onChange に追加された配列が渡る', async () => {
@@ -32,7 +32,7 @@ describe('MultiSelectPicker', () => {
 
   it('選択済みの項目は一覧から消える', () => {
     render(<MultiSelectPicker options={options} value={[options[0]]} onChange={vi.fn()} />);
-    const list = screen.getByRole('list', { name: '選択可能な項目' });
+    const list = screen.getByRole('listbox', { name: '選択可能な項目' });
     expect(list).not.toHaveTextContent('managers');
   });
 

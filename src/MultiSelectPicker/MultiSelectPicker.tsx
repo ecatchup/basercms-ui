@@ -63,7 +63,7 @@ export const MultiSelectPicker = ({
       </div>
 
       <div className="cui-picker__list-wrapper" style={{ maxHeight: listHeight }}>
-        <ul className="cui-picker__list" aria-label="選択可能な項目">
+        <ul className="cui-picker__list" role="listbox" aria-multiselectable="true" aria-label="選択可能な項目">
           {candidates.length > 0 ? (
             candidates.map((option) => {
               const isUnavailable = option.disabled || reachedMax;
@@ -71,6 +71,8 @@ export const MultiSelectPicker = ({
                 <li
                   key={option.id}
                   className="cui-picker__option"
+                  role="option"
+                  aria-selected={false}
                   aria-disabled={isUnavailable || undefined}
                   data-disabled={isUnavailable || undefined}
                   tabIndex={isUnavailable ? -1 : 0}
