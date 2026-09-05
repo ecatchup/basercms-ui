@@ -1,0 +1,35 @@
+.cui-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cui-tags__empty {
+  color: #999;
+  font-size: var(--cui-font-size);
+}
+
+.cui-tags__item {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: var(--cui-accent);
+  border-radius: 15px;
+  font-size: var(--cui-font-size);
+}
+
+.cui-tags__remove {
+  margin-left: 5px;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cui-tags__remove:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
