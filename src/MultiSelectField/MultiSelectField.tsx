@@ -32,12 +32,20 @@ export const MultiSelectField = ({
   emptyText = '選択されていません',
   disabled = false,
   className = '',
+  maxSelected,
   ...pickerProps
 }: MultiSelectFieldProps) => {
   const [open, setOpen] = useState(false);
 
   const selectedIds = new Set(value.map((item) => item.id));
   const candidates = options.filter((option) => !selectedIds.has(option.id));
+
+  // maxSelected は「累計の選択上限」として扱う。Dialog/Picker には既に選択済みを
+  // 除いた candidates しか渡らないため、Dialog にそのまま maxSelected を渡すと
+  // Dialog 内で選べる件数の上限（= そのセッションで新規に選べる件数）になってしまう。
+  // ここで「残り枠」に変換してから渡すことで、累計が maxSelected を超えないようにする。
+  const remainingSlots = maxSelected !== undefined ? Math.max(0, maxSelected - value.length) : undefined;
+  const reachedMax = maxSelected !== undefined && value.length >= maxSelected;
 
   const remove = (id: string) => {
     onChange(value.filter((item) => item.id !== id));
@@ -57,7 +65,12 @@ export const MultiSelectField = ({
       </div>
 
       <div className="cui-field__actions">
-        <button type="button" className="cui-field__add" disabled={disabled} onClick={() => setOpen(true)}>
+        <button
+          type="button"
+          className="cui-field__add"
+          disabled={disabled || reachedMax}
+          onClick={() => setOpen(true)}
+        >
           {addButtonLabel}
         </button>
       </div>
@@ -68,6 +81,7 @@ export const MultiSelectField = ({
         options={candidates}
         onSubmit={submit}
         onCancel={() => setOpen(false)}
+        maxSelected={remainingSlots}
         {...pickerProps}
       />
     </div>

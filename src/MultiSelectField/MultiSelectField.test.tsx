@@ -86,4 +86,33 @@ describe('MultiSelectField', () => {
     expect(screen.getByRole('button', { name: 'グループ追加' })).toBeInTheDocument();
     expect(screen.getByText('未設定')).toBeInTheDocument();
   });
+
+  it('maxSelected を累計の選択上限として扱い、既に上限に達していると追加ボタンが無効になる', () => {
+    render(
+      <MultiSelectField options={options} value={[options[0], options[1]]} onChange={vi.fn()} maxSelected={2} />
+    );
+    expect(screen.getByRole('button', { name: '追加' })).toBeDisabled();
+  });
+
+  it('maxSelected を累計の選択上限として扱い、モーダル内で残り枠を超えて選べない', async () => {
+    const threeOptions: SelectOption[] = [
+      { id: '1', label: '管理者' },
+      { id: '2', label: '利用者' },
+      { id: '3', label: 'ゲスト' },
+    ];
+    render(
+      <MultiSelectField
+        options={threeOptions}
+        value={[threeOptions[0]]}
+        onChange={vi.fn()}
+        maxSelected={2}
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: '追加' }));
+    // 残り枠は 1（maxSelected 2 - 既存選択 1）。モーダル内で 1 件選ぶと上限に達し、
+    // それ以上の候補は選択できなくなる。
+    await userEvent.click(screen.getByText('利用者'));
+    const remainingCandidate = screen.getByText('ゲスト').closest('li');
+    expect(remainingCandidate).toHaveAttribute('aria-disabled', 'true');
+  });
 });
