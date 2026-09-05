@@ -76,7 +76,9 @@ export const SearchSelect = ({
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (disabled) return;
-    if ((event.target as HTMLElement).closest('.cui-select__clear')) return;
+    // クリアボタンの Enter によるネイティブ click を横取りしないための早期 return。
+    // ただし Escape だけは、フォーカスがクリアボタン上にあっても常にドロップダウンを閉じられるようにする。
+    if (event.key !== 'Escape' && (event.target as HTMLElement).closest('.cui-select__clear')) return;
     if (event.key === 'Escape') {
       setOpen(false);
       triggerRef.current?.focus();

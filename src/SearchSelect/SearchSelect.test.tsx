@@ -143,6 +143,15 @@ describe('SearchSelect', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
+  it('ドロップダウンを開いた状態でクリアボタンにフォーカスがあっても Escape で閉じる', async () => {
+    render(<SearchSelect options={options} value="1" onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('combobox'));
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    screen.getByRole('button', { name: '選択を解除' }).focus();
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
   it('searchPlaceholder を渡すとその文言が検索欄に出る', async () => {
     render(
       <SearchSelect options={options} value={null} onChange={vi.fn()} searchPlaceholder="会社名で検索" />
