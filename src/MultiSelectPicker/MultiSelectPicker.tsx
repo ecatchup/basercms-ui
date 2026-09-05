@@ -65,18 +65,28 @@ export const MultiSelectPicker = ({
       <div className="cui-picker__list-wrapper" style={{ maxHeight: listHeight }}>
         <ul className="cui-picker__list" aria-label="選択可能な項目">
           {candidates.length > 0 ? (
-            candidates.map((option) => (
-              <li
-                key={option.id}
-                className="cui-picker__option"
-                data-disabled={option.disabled || reachedMax || undefined}
-                aria-disabled={option.disabled || reachedMax || undefined}
-                onClick={() => add(option)}
-              >
-                <span className="cui-picker__label">{option.label}</span>
-                {option.sublabel && <span className="cui-picker__sublabel">{`(${option.sublabel})`}</span>}
-              </li>
-            ))
+            candidates.map((option) => {
+              const isUnavailable = option.disabled || reachedMax;
+              return (
+                <li
+                  key={option.id}
+                  className="cui-picker__option"
+                  aria-disabled={isUnavailable || undefined}
+                  data-disabled={isUnavailable || undefined}
+                  tabIndex={isUnavailable ? -1 : 0}
+                  onClick={() => add(option)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      add(option);
+                    }
+                  }}
+                >
+                  <span className="cui-picker__label">{option.label}</span>
+                  {option.sublabel && <span className="cui-picker__sublabel">{`(${option.sublabel})`}</span>}
+                </li>
+              );
+            })
           ) : (
             <li className="cui-picker__no-results">{noResultsText}</li>
           )}

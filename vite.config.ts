@@ -3,7 +3,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
-import type { PreRenderedAsset } from 'rollup';
 
 export default defineConfig({
   plugins: [
@@ -19,7 +18,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
-        assetFileNames: (asset: PreRenderedAsset) => (asset.names?.[0]?.endsWith('.css') ? 'style.css' : '[name][extname]'),
+        assetFileNames: (asset) => (asset.names?.[0]?.endsWith('.css') ? 'style.css' : '[name][extname]'),
       },
     },
   },

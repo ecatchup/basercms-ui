@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import type { RefObject } from 'react';
 
-const FOCUSABLE_SELECTOR = 'button, input, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE_SELECTOR =
+  'a[href], button, input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+const isDisabled = (el: HTMLElement): boolean => 'disabled' in el && (el as { disabled: boolean }).disabled;
 
 const getFocusableElements = (container: HTMLElement): HTMLElement[] =>
-  Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-    (el) => !(el as HTMLButtonElement | HTMLInputElement).disabled
-  );
+  Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((el) => !isDisabled(el));
 
 /**
  * enabled のあいだ、ref 内で Tab キーによるフォーカス移動を閉じ込める。

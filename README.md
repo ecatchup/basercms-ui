@@ -55,7 +55,7 @@ type SelectOption = {
 
 ## 複数選択の上限
 
-`MultiSelectPicker` / `MultiSelectDialog` / `MultiSelectField` は `maxSelected` を受け取れます。これは**累計の選択件数の上限**です。上限に達すると、`MultiSelectField` では追加ボタンが無効になり、`MultiSelectPicker` / `MultiSelectDialog` ではそれ以上の追加ができなくなります。
+`MultiSelectPicker` / `MultiSelectDialog` / `MultiSelectField` は `maxSelected` を受け取れます。`MultiSelectField` ではこれを**累計の選択件数の上限**として扱い、上限に達すると追加ボタンが無効になります。一方、`MultiSelectPicker` / `MultiSelectDialog` を単体で使う場合、`maxSelected` はその部品自身の選択状態（`value` / `initialValue`）に対する上限であり、それ以上の追加ができなくなります。
 
 ## モーダルの挙動（MultiSelectDialog / MultiSelectField）
 

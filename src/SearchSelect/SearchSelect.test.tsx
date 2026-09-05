@@ -133,6 +133,16 @@ describe('SearchSelect', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it('クリアボタンにフォーカスして Enter を押すと選択解除され、ドロップダウンは開かない', async () => {
+    const onChange = vi.fn();
+    render(<SearchSelect options={options} value="1" onChange={onChange} />);
+    const clearButton = screen.getByRole('button', { name: '選択を解除' });
+    clearButton.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(onChange).toHaveBeenCalledWith(null);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
   it('searchPlaceholder を渡すとその文言が検索欄に出る', async () => {
     render(
       <SearchSelect options={options} value={null} onChange={vi.fn()} searchPlaceholder="会社名で検索" />

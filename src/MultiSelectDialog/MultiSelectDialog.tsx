@@ -34,6 +34,7 @@ export const MultiSelectDialog = ({
 }: MultiSelectDialogProps) => {
   const [selected, setSelected] = useState<SelectOption[]>(initialValue ?? []);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   // 開くたびに initialValue へ戻す。
   // initialValue は配列リテラルで渡されることが多く参照が毎回変わるため、
@@ -53,9 +54,15 @@ export const MultiSelectDialog = ({
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [open, onCancel]);
 
-  // 開いたらダイアログへフォーカスを移す
+  // 開いたらダイアログへフォーカスを移し、閉じたら元の要素へ戻す
   useEffect(() => {
-    if (open) dialogRef.current?.focus();
+    if (open) {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      dialogRef.current?.focus();
+    } else {
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    }
   }, [open]);
 
   // Tab キーによるフォーカスをダイアログ内に閉じ込める

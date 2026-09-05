@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import type { SelectOption } from '../types';
 import { useFilteredOptions } from '../hooks/useFilteredOptions';
@@ -44,6 +44,9 @@ export const SearchSelect = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+  const getOptionId = (id: string) => `${listId}-option-${id || '__empty__'}`;
 
   const filtered = useFilteredOptions(options, query);
   const items: SelectOption[] = emptyLabel ? [{ id: EMPTY_ID, label: emptyLabel }, ...filtered] : filtered;
@@ -68,12 +71,15 @@ export const SearchSelect = ({
   const commit = (id: string) => {
     onChange(id === EMPTY_ID ? null : id);
     setOpen(false);
+    triggerRef.current?.focus();
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (disabled) return;
+    if ((event.target as HTMLElement).closest('.cui-select__clear')) return;
     if (event.key === 'Escape') {
       setOpen(false);
+      triggerRef.current?.focus();
       return;
     }
     if (!open) {
@@ -101,10 +107,13 @@ export const SearchSelect = ({
       {name && <input type="hidden" name={name} value={value ?? ''} />}
 
       <div
+        ref={triggerRef}
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-disabled={disabled}
+        aria-controls={open ? listId : undefined}
+        aria-activedescendant={open && items[activeIndex] ? getOptionId(items[activeIndex].id) : undefined}
         tabIndex={disabled ? -1 : 0}
         className="cui-select__trigger"
         data-disabled={disabled || undefined}
@@ -149,11 +158,12 @@ export const SearchSelect = ({
             />
           </div>
 
-          <ul role="listbox" className="cui-select__list">
+          <ul role="listbox" id={listId} className="cui-select__list">
             {items.length > 0 ? (
               items.map((item, index) => (
                 <li
                   key={item.id || '__empty__'}
+                  id={getOptionId(item.id)}
                   role="option"
                   aria-selected={item.id === (value ?? EMPTY_ID)}
                   aria-disabled={item.disabled || undefined}

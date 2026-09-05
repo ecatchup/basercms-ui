@@ -16,6 +16,9 @@ export type MultiSelectFieldProps = Pick<
   dialogTitle?: string;
   emptyText?: string;
   disabled?: boolean;
+  submitLabel?: string;
+  cancelLabel?: string;
+  requireSelection?: boolean;
 };
 
 /**
@@ -33,6 +36,9 @@ export const MultiSelectField = ({
   disabled = false,
   className = '',
   maxSelected,
+  submitLabel,
+  cancelLabel,
+  requireSelection,
   ...pickerProps
 }: MultiSelectFieldProps) => {
   const [open, setOpen] = useState(false);
@@ -82,6 +88,9 @@ export const MultiSelectField = ({
         onSubmit={submit}
         onCancel={() => setOpen(false)}
         maxSelected={remainingSlots}
+        submitLabel={submitLabel}
+        cancelLabel={cancelLabel}
+        requireSelection={requireSelection}
         {...pickerProps}
       />
     </div>

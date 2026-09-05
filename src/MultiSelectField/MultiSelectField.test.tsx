@@ -87,6 +87,26 @@ describe('MultiSelectField', () => {
     expect(screen.getByText('未設定')).toBeInTheDocument();
   });
 
+  it('ダイアログの決定・キャンセル文言と requireSelection を上書きできる', async () => {
+    const onChange = vi.fn();
+    render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={onChange}
+        submitLabel="OK"
+        cancelLabel="やめる"
+        requireSelection={false}
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: '追加' }));
+    expect(screen.getByRole('button', { name: 'やめる' })).toBeInTheDocument();
+    const submit = screen.getByRole('button', { name: 'OK' });
+    expect(submit).toBeEnabled();
+    await userEvent.click(submit);
+    expect(onChange).toHaveBeenCalledWith([]);
+  });
+
   it('maxSelected を累計の選択上限として扱い、既に上限に達していると追加ボタンが無効になる', () => {
     render(
       <MultiSelectField options={options} value={[options[0], options[1]]} onChange={vi.fn()} maxSelected={2} />
