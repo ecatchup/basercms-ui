@@ -1,0 +1,8 @@
+:root {
+  --cui-accent: #D4EDC9;
+  --cui-accent-hover: #E9F7E3;
+  --cui-border: #ccc;
+  --cui-radius: 4px;
+  --cui-font-size: 14px;
+  --cui-z-index: 9999;
+}
