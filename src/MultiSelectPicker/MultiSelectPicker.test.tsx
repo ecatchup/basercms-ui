@@ -69,3 +69,24 @@ describe('MultiSelectPicker', () => {
     expect(input).toHaveValue('');
   });
 });
+
+describe('MultiSelectPicker（disabled オプション）', () => {
+  const optionsWithDisabled: SelectOption[] = [
+    { id: '1', label: '管理者', sublabel: 'managers' },
+    { id: '2', label: '退職者', sublabel: 'retired', disabled: true },
+  ];
+
+  it('disabled のオプションをクリックしても onChange が呼ばれない', async () => {
+    const onChange = vi.fn();
+    render(<MultiSelectPicker options={optionsWithDisabled} value={[]} onChange={onChange} />);
+    await userEvent.click(screen.getByText('退職者'));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('disabled のオプションには data-disabled と aria-disabled が付く', () => {
+    render(<MultiSelectPicker options={optionsWithDisabled} value={[]} onChange={vi.fn()} />);
+    const item = screen.getByText('退職者').closest('li');
+    expect(item).toHaveAttribute('data-disabled');
+    expect(item).toHaveAttribute('aria-disabled');
+  });
+});
