@@ -120,4 +120,24 @@ describe('SearchSelect', () => {
     const { container } = render(<SearchSelect options={options} value="2" onChange={vi.fn()} />);
     expect(container.querySelector('input[type="hidden"]')).toBeNull();
   });
+
+  it('disabled のオプションをクリックしても onChange が呼ばれない', async () => {
+    const onChange = vi.fn();
+    const optionsWithDisabled: SelectOption[] = [
+      ...options,
+      { id: '4', label: '（株）無効サンプル', disabled: true },
+    ];
+    render(<SearchSelect options={optionsWithDisabled} value={null} onChange={onChange} />);
+    await userEvent.click(screen.getByRole('combobox'));
+    await userEvent.click(screen.getByRole('option', { name: '（株）無効サンプル' }));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('searchPlaceholder を渡すとその文言が検索欄に出る', async () => {
+    render(
+      <SearchSelect options={options} value={null} onChange={vi.fn()} searchPlaceholder="会社名で検索" />
+    );
+    await userEvent.click(screen.getByRole('combobox'));
+    expect(screen.getByPlaceholderText('会社名で検索')).toBeInTheDocument();
+  });
 });

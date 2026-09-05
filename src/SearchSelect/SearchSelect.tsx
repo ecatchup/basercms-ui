@@ -17,6 +17,8 @@ export type SearchSelectProps = {
   clearable?: boolean;
   disabled?: boolean;
   noResultsText?: string;
+  /** 検索欄の placeholder */
+  searchPlaceholder?: string;
   dropdownPlacement?: 'auto' | 'top' | 'bottom';
   className?: string;
 };
@@ -33,6 +35,7 @@ export const SearchSelect = ({
   clearable = true,
   disabled = false,
   noResultsText = '一致する項目がありません',
+  searchPlaceholder = '検索...',
   dropdownPlacement = 'auto',
   className = '',
 }: SearchSelectProps) => {
@@ -136,7 +139,7 @@ export const SearchSelect = ({
               ref={searchRef}
               type="text"
               className="cui-select__search-input"
-              placeholder="検索..."
+              placeholder={searchPlaceholder}
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -153,11 +156,13 @@ export const SearchSelect = ({
                   key={item.id || '__empty__'}
                   role="option"
                   aria-selected={item.id === (value ?? EMPTY_ID)}
+                  aria-disabled={item.disabled || undefined}
                   className="cui-select__option"
                   data-active={index === activeIndex || undefined}
                   data-selected={item.id === (value ?? EMPTY_ID) || undefined}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onClick={() => commit(item.id)}
+                  data-disabled={item.disabled || undefined}
+                  onMouseEnter={() => !item.disabled && setActiveIndex(index)}
+                  onClick={() => !item.disabled && commit(item.id)}
                 >
                   <span className="cui-select__label">{item.label}</span>
                   {item.sublabel && <span className="cui-select__sublabel">{`(${item.sublabel})`}</span>}

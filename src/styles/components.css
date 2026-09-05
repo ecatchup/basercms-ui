@@ -147,6 +147,12 @@
   font-weight: bold;
 }
 
+.cui-select__option[data-disabled] {
+  color: #999;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
 .cui-select__sublabel {
   margin-left: 4px;
   font-size: 0.8em;
