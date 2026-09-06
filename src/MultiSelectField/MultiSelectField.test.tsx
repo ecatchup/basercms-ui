@@ -55,7 +55,10 @@ describe('MultiSelectField', () => {
     const { container } = render(
       <MultiSelectField options={options} value={options} onChange={vi.fn()} name="data[User][group_ids][]" />
     );
-    const hidden = container.querySelectorAll('input[type="hidden"]');
+    // 0.2.0 でセンチネル hidden（name="data[User][group_ids]"、[] なし）が常に追加されるようになったため、
+    // ここでは選択分の hidden（name="data[User][group_ids][]"）のみを対象に絞って検証する。
+    // センチネル自体の検証・順序の検証は下記の別テストで行う。
+    const hidden = container.querySelectorAll('input[type="hidden"][name="data\\[User\\]\\[group_ids\\]\\[\\]"]');
     expect(hidden).toHaveLength(2);
     expect(hidden[0]).toHaveAttribute('name', 'data[User][group_ids][]');
     expect(hidden[0]).toHaveValue('1');
@@ -65,6 +68,75 @@ describe('MultiSelectField', () => {
   it('name を渡さなければ hidden input を描画しない', () => {
     const { container } = render(<MultiSelectField options={options} value={options} onChange={vi.fn()} />);
     expect(container.querySelectorAll('input[type="hidden"]')).toHaveLength(0);
+  });
+
+  it('name に [] が付いていると、[] を外した name の空 hidden（センチネル）が出る', () => {
+    const { container } = render(
+      <MultiSelectField options={options} value={options} onChange={vi.fn()} name="data[User][group_ids][]" />
+    );
+    const sentinel = container.querySelector('input[type="hidden"][name="data\\[User\\]\\[group_ids\\]"]');
+    expect(sentinel).not.toBeNull();
+    expect(sentinel).toHaveValue('');
+  });
+
+  it('センチネルは選択分の hidden より DOM 上で前に出る（順序が重要）', () => {
+    const { container } = render(
+      <MultiSelectField options={options} value={options} onChange={vi.fn()} name="data[User][group_ids][]" />
+    );
+    const hidden = container.querySelectorAll('input[type="hidden"]');
+    // センチネル（[] なし）→ 選択分（[] あり）の順で並んでいること
+    expect(hidden).toHaveLength(3);
+    expect(hidden[0]).toHaveAttribute('name', 'data[User][group_ids]');
+    expect(hidden[1]).toHaveAttribute('name', 'data[User][group_ids][]');
+    expect(hidden[2]).toHaveAttribute('name', 'data[User][group_ids][]');
+
+    const sentinel = hidden[0];
+    const firstSelected = hidden[1];
+    // DOCUMENT_POSITION_FOLLOWING (4) が立っていれば、sentinel は firstSelected より前にある
+    const position = sentinel.compareDocumentPosition(firstSelected);
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  it('選択が0件でもセンチネルは出る', () => {
+    const { container } = render(
+      <MultiSelectField options={options} value={[]} onChange={vi.fn()} name="data[User][group_ids][]" />
+    );
+    const hidden = container.querySelectorAll('input[type="hidden"]');
+    expect(hidden).toHaveLength(1);
+    expect(hidden[0]).toHaveAttribute('name', 'data[User][group_ids]');
+    expect(hidden[0]).toHaveValue('');
+  });
+
+  it('emptyName で任意の name に上書きできる', () => {
+    const { container } = render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        name="data[User][group_ids][]"
+        emptyName="custom_name"
+      />
+    );
+    const hidden = container.querySelectorAll('input[type="hidden"]');
+    expect(hidden).toHaveLength(1);
+    expect(hidden[0]).toHaveAttribute('name', 'custom_name');
+    expect(hidden[0]).toHaveValue('');
+  });
+
+  it('emptyName={false} を渡すとセンチネルを出さない', () => {
+    const { container } = render(
+      <MultiSelectField
+        options={options}
+        value={options}
+        onChange={vi.fn()}
+        name="data[User][group_ids][]"
+        emptyName={false}
+      />
+    );
+    const hidden = container.querySelectorAll('input[type="hidden"]');
+    expect(hidden).toHaveLength(2);
+    expect(hidden[0]).toHaveAttribute('name', 'data[User][group_ids][]');
+    expect(hidden[1]).toHaveAttribute('name', 'data[User][group_ids][]');
   });
 
   it('disabled のとき追加ボタンとタグの × が無効', () => {

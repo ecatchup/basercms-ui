@@ -12,6 +12,12 @@ export type MultiSelectFieldProps = Pick<
   onChange: (selected: SelectOption[]) => void;
   /** 指定時、選択件数分の hidden input を描画する */
   name?: string;
+  /**
+   * 選択が 0 件でもキーを送るための hidden の name。
+   * 既定は name の末尾の `[]` を除いたもの（PHP / Rails 等の配列記法に対応）。
+   * false を渡すと出力しない。
+   */
+  emptyName?: string | false;
   addButtonLabel?: string;
   dialogTitle?: string;
   emptyText?: string;
@@ -36,6 +42,7 @@ export const MultiSelectField = ({
   value,
   onChange,
   name,
+  emptyName,
   addButtonLabel = '追加',
   dialogTitle = '選択',
   emptyText = '選択されていません',
@@ -71,8 +78,16 @@ export const MultiSelectField = ({
     setOpen(false);
   };
 
+  // 選択 0 件だとフォームからキー自体が送信されない、という HTML の性質を回避するため、
+  // name 指定時は常に「センチネル」の空 hidden を選択分より前に出す。
+  // name の末尾の `[]` を外すのは、[] 付きのまま空 hidden だけを送ると
+  // サーバー側で ['']（要素1つの配列）として届き、empty() 等のチェックを
+  // 素通りしてしまうため（CakePHP の FormHelper::select(multiple) も同様に [] を外す）。
+  const sentinelName = emptyName === false ? undefined : emptyName ?? name?.replace(/\[\]$/, '');
+
   return (
     <div className={`bca-multi-select-field ${className}`.trim()}>
+      {name && sentinelName && <input type="hidden" name={sentinelName} value="" />}
       {name && value.map((item) => <input key={item.id} type="hidden" name={name} value={item.id} />)}
 
       <div className="bca-multi-select-field__tags">
