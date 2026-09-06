@@ -22,8 +22,13 @@
 }
 
 .bca-selected-tags__remove {
-  font: inherit;
+  /* レイアウト（タグ内でのラベルとの間隔）は baserCMS の .bca-btn に奪われても
+     崩れてはいけないため、通常の詳細度のままにする */
   margin-left: 5px;
+}
+
+:where(.bca-selected-tags__remove) {
+  font: inherit;
   border: none;
   background: transparent;
   font-weight: bold;
@@ -302,7 +307,7 @@
   font-weight: bold;
 }
 
-.bca-multi-select-dialog__close {
+:where(.bca-multi-select-dialog__close) {
   font: inherit;
   border: none;
   background: transparent;
@@ -326,7 +331,7 @@
   border-top: 1px solid var(--bca-border);
 }
 
-.bca-multi-select-dialog__button {
+:where(.bca-multi-select-dialog__button) {
   font: inherit;
   padding: 4px 16px;
   border: 1px solid var(--bca-border);
@@ -335,7 +340,7 @@
   cursor: pointer;
 }
 
-.bca-multi-select-dialog__button--primary {
+:where(.bca-multi-select-dialog__button--primary) {
   background-color: var(--bca-accent);
 }
 
@@ -360,7 +365,7 @@
   margin-top: 8px;
 }
 
-.bca-multi-select-field__add {
+:where(.bca-multi-select-field__add) {
   font: inherit;
   padding: 4px 16px;
   border: 1px solid var(--bca-border);

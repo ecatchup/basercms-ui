@@ -61,20 +61,34 @@ type SelectOption = {
 
 モーダルは Escape キー・閉じるボタン（×）・キャンセルボタンで閉じます。誤操作防止のため、オーバーレイ（背景）のクリックでは閉じません。開いている間はフォーカスがモーダル内に閉じ込められます（Tab / Shift+Tab で外へ出ません）。
 
-## 既存のデザインシステムのボタンスタイルを当てたい場合
+## ボタンのクラス・属性（既定で baserCMS のボタンスタイルが当たります）
 
-baserCMS 等、既存のデザインシステムのボタンにクラス・data 属性を渡したい場合、
 `MultiSelectField` の `addButtonProps`、`MultiSelectDialog` の `submitButtonProps` /
-`cancelButtonProps` にオブジェクトを渡してください（`MultiSelectField` に渡した
-`submitButtonProps` / `cancelButtonProps` はモーダルへそのまま転送されます）。渡した
-`className` は部品側のクラスを置き換えず、後ろに連結されます。`type` / `onClick` /
-`disabled` は部品側が制御するため渡せません。
+`cancelButtonProps` は、既定で以下の値になっています（baserCMS の `.bca-btn` を
+前提にしています）。
+
+| prop | 既定値 |
+| --- | --- |
+| `addButtonProps`（MultiSelectField） | `{ className: 'bca-btn', 'data-bca-btn-type': 'add' }` |
+| `submitButtonProps`（MultiSelectDialog） | `{ className: 'bca-btn', 'data-bca-btn-type': 'save' }` |
+| `cancelButtonProps`（MultiSelectDialog） | `{ className: 'bca-btn' }` |
+
+**既定値は「置き換え」です。マージではありません。** 何か1つでも渡すと、既定値は使われず渡した内容がそのまま使われます。既定のクラス・属性が不要な場合は空オブジェクト（`{}`）を渡してください。`MultiSelectField` に渡した `submitButtonProps` / `cancelButtonProps` はモーダルへそのまま転送されます。`type` / `onClick` / `disabled` は部品側が制御するため渡せません。
 
 ```tsx
+// baserCMS 以外の見た目にしたい場合
 <MultiSelectField
-  addButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'add' }}
-  submitButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'submit' }}
-  cancelButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'cancel' }}
+  addButtonProps={{ className: 'my-add-button' }}
+  submitButtonProps={{ className: 'my-submit-button' }}
+  cancelButtonProps={{ className: 'my-cancel-button' }}
+  ...
+/>
+
+// 何も付けたくない場合
+<MultiSelectField
+  addButtonProps={{}}
+  submitButtonProps={{}}
+  cancelButtonProps={{}}
   ...
 />
 ```

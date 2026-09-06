@@ -146,6 +146,35 @@ describe('MultiSelectDialog', () => {
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
 
+  it('submitButtonProps / cancelButtonProps を渡さなければ baserCMS 既定のクラス・属性が付く', () => {
+    render(<MultiSelectDialog open options={options} onSubmit={vi.fn()} onCancel={vi.fn()} />);
+    const submit = screen.getByRole('button', { name: '決定' });
+    const cancel = screen.getByRole('button', { name: 'キャンセル' });
+    expect(submit).toHaveClass('bca-multi-select-dialog__button', 'bca-multi-select-dialog__button--primary', 'bca-btn');
+    expect(submit).toHaveAttribute('data-bca-btn-type', 'save');
+    expect(cancel).toHaveClass('bca-multi-select-dialog__button', 'bca-btn');
+    expect(cancel).not.toHaveAttribute('data-bca-btn-type');
+  });
+
+  it('submitButtonProps / cancelButtonProps を明示的に渡すと既定値は付かず、渡した内容で置き換わる', () => {
+    render(
+      <MultiSelectDialog
+        open
+        options={options}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitButtonProps={{ className: 'my-submit' }}
+        cancelButtonProps={{}}
+      />
+    );
+    const submit = screen.getByRole('button', { name: '決定' });
+    const cancel = screen.getByRole('button', { name: 'キャンセル' });
+    expect(submit).toHaveClass('my-submit');
+    expect(submit).not.toHaveClass('bca-btn');
+    expect(submit).not.toHaveAttribute('data-bca-btn-type');
+    expect(cancel).not.toHaveClass('bca-btn');
+  });
+
   it('submitButtonProps / cancelButtonProps で渡したクラス・属性が反映される（既存クラスは残る）', () => {
     render(
       <MultiSelectDialog

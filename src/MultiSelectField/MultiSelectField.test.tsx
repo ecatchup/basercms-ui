@@ -169,6 +169,39 @@ describe('MultiSelectField', () => {
     expect(cancel).toHaveAttribute('data-bca-btn-type', 'cancel');
   });
 
+  it('addButtonProps / submitButtonProps / cancelButtonProps を渡さなければ baserCMS 既定のクラス・属性が付く', async () => {
+    render(<MultiSelectField options={options} value={[]} onChange={vi.fn()} />);
+    const addButton = screen.getByRole('button', { name: '追加' });
+    expect(addButton).toHaveClass('bca-multi-select-field__add', 'bca-btn');
+    expect(addButton).toHaveAttribute('data-bca-btn-type', 'add');
+
+    await userEvent.click(addButton);
+    const submit = screen.getByRole('button', { name: '決定' });
+    const cancel = screen.getByRole('button', { name: 'キャンセル' });
+    expect(submit).toHaveClass('bca-btn');
+    expect(submit).toHaveAttribute('data-bca-btn-type', 'save');
+    expect(cancel).toHaveClass('bca-btn');
+    expect(cancel).not.toHaveAttribute('data-bca-btn-type');
+  });
+
+  it('addButtonProps を明示的に渡すと既定値は付かず、渡した内容で置き換わる', () => {
+    render(
+      <MultiSelectField options={options} value={[]} onChange={vi.fn()} addButtonProps={{ className: 'my-btn' }} />
+    );
+    const button = screen.getByRole('button', { name: '追加' });
+    expect(button).toHaveClass('my-btn');
+    expect(button).not.toHaveClass('bca-btn');
+    expect(button).not.toHaveAttribute('data-bca-btn-type');
+  });
+
+  it('addButtonProps={{}} を渡すと何もクラス・属性が付かない', () => {
+    render(<MultiSelectField options={options} value={[]} onChange={vi.fn()} addButtonProps={{}} />);
+    const button = screen.getByRole('button', { name: '追加' });
+    expect(button).toHaveClass('bca-multi-select-field__add');
+    expect(button).not.toHaveClass('bca-btn');
+    expect(button).not.toHaveAttribute('data-bca-btn-type');
+  });
+
   it('addButtonProps に onClick/disabled を無理やり渡しても部品側の挙動が壊れない', async () => {
     const rogueOnClick = vi.fn();
     render(

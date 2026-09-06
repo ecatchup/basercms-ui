@@ -33,8 +33,8 @@ export const MultiSelectDialog = ({
   submitLabel = '決定',
   cancelLabel = 'キャンセル',
   requireSelection = true,
-  submitButtonProps,
-  cancelButtonProps,
+  submitButtonProps = { className: 'bca-btn', 'data-bca-btn-type': 'save' },
+  cancelButtonProps = { className: 'bca-btn' },
   className = '',
   ...pickerProps
 }: MultiSelectDialogProps) => {

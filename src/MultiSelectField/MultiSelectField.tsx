@@ -45,7 +45,7 @@ export const MultiSelectField = ({
   submitLabel,
   cancelLabel,
   requireSelection,
-  addButtonProps,
+  addButtonProps = { className: 'bca-btn', 'data-bca-btn-type': 'add' },
   submitButtonProps,
   cancelButtonProps,
   ...pickerProps
