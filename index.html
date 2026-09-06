@@ -41,6 +41,15 @@
       .bca-textbox__input::placeholder {
         color: #c9c8c8;
       }
+
+      /*
+        SearchSelect は 0.3.0 から既定で幅を指定しない（README「幅」参照）。
+        幅いっぱいにしたい場合の利用側 CSS の例として、デモ専用にこのクラスを
+        用意している（このスタイルも dist には含まれない）。
+      */
+      .demo-full-width {
+        width: 100%;
+      }
     </style>
   </head>
   <body>

@@ -41,8 +41,9 @@
 }
 
 .bca-search-select {
+  /* width は指定しない。部品は幅を主張せず、幅いっぱいにしたい場合は
+     利用側が className 経由で width: 100% 等を指定する（README 参照）。 */
   position: relative;
-  width: 100%;
   font-size: var(--bca-font-size);
 }
 
@@ -50,11 +51,13 @@
   /* レイアウトに関わる宣言は部品側が通常の詳細度で保持する。
      margin はここでは指定しない。baserCMS の .bca-textbox__input の
      margin: 4px をそのまま効かせることで、隣に並ぶ日付ピッカー等と
-     縦位置・間隔を揃えられるようにするため。 */
+     縦位置・間隔を揃えられるようにするため。
+     width も指定しない。中身（選択中のラベル or プレースホルダ）の
+     長さに合わせて伸縮する。幅いっぱいにしたい場合は利用側が
+     className 経由で width: 100% 等を指定する（README 参照）。 */
   position: relative;
   align-items: center;
   box-sizing: border-box;
-  width: 100%;
   cursor: pointer;
 }
 
@@ -118,6 +121,10 @@
 }
 
 .bca-search-select__dropdown {
+  /* position: absolute でトリガーを基準に配置しているため、width: 100% は
+     維持する（トリガーの幅を追従する）。トリガーが width を持たなくなった
+     0.3.0 以降も、この width はドロップダウン自身の幅をトリガーに揃える
+     ためのものであり、外すと候補一覧の幅が崩れて読めなくなる。 */
   position: absolute;
   left: 0;
   width: 100%;
@@ -146,6 +153,9 @@
 }
 
 .bca-search-select__search-input {
+  /* ドロップダウン内の検索欄。ドロップダウン自体が幅いっぱいの領域を
+     持つため、その中で width: 100% を維持するのは自然であり、
+     トリガーの幅指定を外したこととは独立して残す。 */
   box-sizing: border-box;
   width: 100%;
 }

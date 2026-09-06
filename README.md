@@ -61,6 +61,28 @@ type SelectOption = {
 
 モーダルは Escape キー・閉じるボタン（×）・キャンセルボタンで閉じます。誤操作防止のため、オーバーレイ（背景）のクリックでは閉じません。開いている間はフォーカスがモーダル内に閉じ込められます（Tab / Shift+Tab で外へ出ません）。
 
+## 幅
+
+`SearchSelect`（トリガー・ルート要素）は幅を指定していません。部品は幅を主張せず、レイアウトは利用側が決める方針です。幅を指定しない場合、トリガーは中身（選択中のラベル、または未選択時はプレースホルダ）の長さに応じて伸縮します。
+
+幅いっぱいにしたい場合は、`className` を渡して利用側の CSS で `width: 100%` を指定してください。
+
+```tsx
+<SearchSelect className="my-search-select" options={options} value={value} onChange={setValue} />
+```
+
+```css
+.my-search-select {
+  width: 100%;
+}
+```
+
+ドロップダウン（候補一覧）はトリガーを基準に `position: absolute` で配置されるため、常にトリガーの幅に追従します。トリガーの幅を指定しなかった場合はドロップダウンもトリガーと同じ幅（＝中身に応じた幅）になり、`className` で幅を指定すればドロップダウンもそれに追従します。
+
+なお、幅を指定しないと `overflow` / `text-overflow: ellipsis` によるラベルの省略表示は発動しません（省略は要素の幅が中身より狭いときに効くため、幅が中身に合わせて伸びる状態では発動しようがありません）。長いラベルを省略したい場合は、上記のように `className` で幅を制限してください。
+
+一方、`MultiSelectPicker` の検索欄など、モーダル内で使われる要素は従来どおり幅いっぱい（`width: 100%`）のままです。これらはモーダルという明確な幅を持つコンテナの中に置かれるため、幅いっぱいが自然な既定だからです。
+
 ## ボタンのクラス・属性（既定で baserCMS のボタンスタイルが当たります）
 
 `MultiSelectField` の `addButtonProps`、`MultiSelectDialog` の `submitButtonProps` /

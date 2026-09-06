@@ -49,6 +49,29 @@ const Demo = () => {
       />
       <p>選択値: {user ?? '(なし)'}</p>
 
+      <h2>SearchSelect の幅（0.3.0〜: 既定では幅を指定しない）</h2>
+      <p>
+        0.3.0 から <code>SearchSelect</code> は幅を指定しない。ラベルの右に置くような場面では
+        中身（選択中のラベル or プレースホルダ）に応じて伸縮し、幅いっぱいにしたい場合は
+        <code>className</code>（このデモでは <code>demo-full-width</code>、README 参照）で
+        利用側が指定する。ラベルと横並び（flex）で並べたときの違いが分かりやすいので、
+        あえてその文脈で両方を並べている。
+      </p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+        <span style={{ width: 120 }}>幅を指定しない:</span>
+        <SearchSelect options={users} value={user} onChange={setUser} emptyLabel="指定なし" />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ width: 120 }}>className で幅いっぱい:</span>
+        <SearchSelect
+          className="demo-full-width"
+          options={users}
+          value={user}
+          onChange={setUser}
+          emptyLabel="指定なし"
+        />
+      </div>
+
       <h2>SearchSelect ＋ baserCMS の日付ピッカー（高さ・マージンの確認用）</h2>
       <p>
         baserCMS 管理画面の <code>.bca-textbox__input</code> を想定した CSS をこのデモにのみ適用している
