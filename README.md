@@ -63,9 +63,11 @@ type SelectOption = {
 
 ## 幅
 
-`SearchSelect`（トリガー・ルート要素）は幅を指定していません。部品は幅を主張せず、レイアウトは利用側が決める方針です。幅を指定しない場合、トリガーは中身（選択中のラベル、または未選択時はプレースホルダ）の長さに応じて伸縮します。
+`SearchSelect` の幅の調整点は、**ルート要素ひとつ**に集約されています。
 
-幅いっぱいにしたい場合は、`className` を渡して利用側の CSS で `width: 100%` を指定してください。
+ルート要素（`.bca-search-select`）の既定は `display: inline-block` で、幅は中身（選択中のラベル、または未選択時はプレースホルダ）に応じた内容幅になります。部品が親要素いっぱいに広がることはありません。トリガーとドロップダウンはどちらもルート要素の幅に追従する為、利用側が指定するのはルート要素の幅だけで済みます。
+
+幅いっぱいにしたい場合は、`className` を渡して利用側の CSS で `width: 100%` を指定してください。トリガーもドロップダウンも一緒に追従します。
 
 ```tsx
 <SearchSelect className="my-search-select" options={options} value={value} onChange={setValue} />
@@ -77,9 +79,13 @@ type SelectOption = {
 }
 ```
 
-ドロップダウン（候補一覧）は `position: relative` を持つルート要素を基準に `position: absolute` で配置されます。ルート要素の幅はトリガーによって決まるため、ドロップダウンの幅は実質トリガーの幅に一致します。トリガーの幅を指定しなかった場合はドロップダウンもトリガーと同じ幅（＝中身に応じた幅）になり、`className` で幅を指定すればドロップダウンもそれに追従します。
+トリガーの `display` は部品側では宣言していません。baserCMS 環境では既定の `triggerProps`（`className: 'bca-textbox__input'`）の `inline-block` がそのまま効き、それ以外の環境では部品同梱の `:where()` の既定（`inline-block`）が効きます。`triggerProps` にインラインスタイルを渡せば上書きできます。
 
-なお、幅を指定しないと `overflow` / `text-overflow: ellipsis` によるラベルの省略表示は発動しません（省略は要素の幅が中身より狭いときに効くため、幅が中身に合わせて伸びる状態では発動しようがありません）。長いラベルを省略したい場合は、上記のように `className` で幅を制限してください。
+```tsx
+<SearchSelect triggerProps={{ className: 'bca-textbox__input', style: { display: 'flex' } }} ... />
+```
+
+なお、ルート要素の幅を指定しないと `overflow` / `text-overflow: ellipsis` によるラベルの省略表示は発動しません（省略は要素の幅が中身より狭いときに効くため、幅が中身に合わせて伸びる状態では発動しようがありません）。長いラベルを省略したい場合は、上記のように `className` で幅を制限してください。
 
 一方、`MultiSelectPicker` の検索欄など、モーダル内で使われる要素は従来どおり幅いっぱい（`width: 100%`）のままです。これらはモーダルという明確な幅を持つコンテナの中に置かれるため、幅いっぱいが自然な既定だからです。
 
