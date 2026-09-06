@@ -73,7 +73,7 @@ type SelectOption = {
 | `submitButtonProps`（MultiSelectDialog） | `{ className: 'bca-btn', 'data-bca-btn-type': 'save' }` |
 | `cancelButtonProps`（MultiSelectDialog） | `{ className: 'bca-btn' }` |
 
-**既定値は「置き換え」です。マージではありません。** 何か1つでも渡すと、既定値は使われず渡した内容がそのまま使われます。既定のクラス・属性が不要な場合は空オブジェクト（`{}`）を渡してください。`MultiSelectField` に渡した `submitButtonProps` / `cancelButtonProps` はモーダルへそのまま転送されます。`type` / `onClick` / `disabled` は部品側が制御するため渡せません。
+**既定値は「置き換え」です。マージではありません。** 何か1つでも渡すと、既定値は使われず渡した内容がそのまま使われます。既定のクラス・属性が不要な場合は空オブジェクト（`{}`）を渡してください。ただしこれで置き換わるのは追加のクラス・属性だけで、部品自身の BEM クラス（`bca-multi-select-field__add` 等）は常に付くため、`{}` を渡しても部品同梱の CSS は効き続けます（baserCMS のボタンスタイルだけ外したい場合に使えます）。`MultiSelectField` に渡した `submitButtonProps` / `cancelButtonProps` はモーダルへそのまま転送されます。`type` / `onClick` / `disabled` は部品側が制御するため渡せません。
 
 ```tsx
 // baserCMS 以外の見た目にしたい場合
