@@ -6,7 +6,7 @@ import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export type MultiSelectDialogProps = Pick<
   MultiSelectPickerProps,
-  'options' | 'searchPlaceholder' | 'noResultsText' | 'listHeight' | 'maxSelected' | 'className'
+  'options' | 'searchPlaceholder' | 'noResultsText' | 'listHeight' | 'maxSelected' | 'className' | 'searchInputProps'
 > & {
   open: boolean;
   title?: string;

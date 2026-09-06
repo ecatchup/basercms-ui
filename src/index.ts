@@ -1,4 +1,4 @@
-export type { SelectOption, ButtonPassthroughProps } from './types';
+export type { SelectOption, ButtonPassthroughProps, InputPassthroughProps, TriggerPassthroughProps } from './types';
 export { SearchSelect } from './SearchSelect/SearchSelect';
 export type { SearchSelectProps } from './SearchSelect/SearchSelect';
 export { MultiSelectPicker } from './MultiSelectPicker/MultiSelectPicker';

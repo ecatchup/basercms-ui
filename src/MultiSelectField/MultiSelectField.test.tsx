@@ -218,4 +218,19 @@ describe('MultiSelectField', () => {
     expect(rogueOnClick).not.toHaveBeenCalled();
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
+
+  it('searchInputProps がモーダル内の検索欄まで届く', async () => {
+    render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        searchInputProps={{ className: 'my-search' }}
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: '追加' }));
+    const searchInput = screen.getByPlaceholderText('検索...');
+    expect(searchInput).toHaveClass('my-search');
+    expect(searchInput).not.toHaveClass('bca-textbox__input');
+  });
 });

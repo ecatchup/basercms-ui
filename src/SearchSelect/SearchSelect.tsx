@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import type { SelectOption } from '../types';
+import type { InputPassthroughProps, SelectOption, TriggerPassthroughProps } from '../types';
 import { useFilteredOptions } from '../hooks/useFilteredOptions';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import { useDropdownPlacement } from '../hooks/useDropdownPlacement';
@@ -21,6 +21,10 @@ export type SearchSelectProps = {
   searchPlaceholder?: string;
   dropdownPlacement?: 'auto' | 'top' | 'bottom';
   className?: string;
+  /** トリガー（閉じた状態の表示部）へ渡す任意のクラス・属性（baserCMS 等の input スタイル用） */
+  triggerProps?: TriggerPassthroughProps;
+  /** 検索欄へ渡す任意のクラス・属性（baserCMS 等の input スタイル用） */
+  searchInputProps?: InputPassthroughProps;
 };
 
 const EMPTY_ID = '';
@@ -38,6 +42,8 @@ export const SearchSelect = ({
   searchPlaceholder = '検索...',
   dropdownPlacement = 'auto',
   className = '',
+  triggerProps = { className: 'bca-textbox__input' },
+  searchInputProps = { className: 'bca-textbox__input' },
 }: SearchSelectProps) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -112,6 +118,7 @@ export const SearchSelect = ({
       {name && <input type="hidden" name={name} value={value ?? ''} />}
 
       <div
+        {...triggerProps}
         ref={triggerRef}
         role="combobox"
         aria-expanded={open}
@@ -120,7 +127,7 @@ export const SearchSelect = ({
         aria-controls={open ? listId : undefined}
         aria-activedescendant={open && items[activeIndex] ? getOptionId(items[activeIndex].id) : undefined}
         tabIndex={disabled ? -1 : 0}
-        className="bca-search-select__trigger"
+        className={`bca-search-select__trigger ${triggerProps?.className ?? ''}`.trim()}
         data-disabled={disabled || undefined}
         onClick={() => !disabled && setOpen(!open)}
       >
@@ -150,9 +157,10 @@ export const SearchSelect = ({
         <div className="bca-search-select__dropdown" data-placement={placement}>
           <div className="bca-search-select__search">
             <input
+              {...searchInputProps}
               ref={searchRef}
               type="text"
-              className="bca-search-select__search-input"
+              className={`bca-search-select__search-input ${searchInputProps?.className ?? ''}`.trim()}
               placeholder={searchPlaceholder}
               value={query}
               onChange={(event) => {

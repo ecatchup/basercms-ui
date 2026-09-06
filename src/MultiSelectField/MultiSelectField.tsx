@@ -6,7 +6,7 @@ import type { MultiSelectPickerProps } from '../MultiSelectPicker/MultiSelectPic
 
 export type MultiSelectFieldProps = Pick<
   MultiSelectPickerProps,
-  'options' | 'searchPlaceholder' | 'noResultsText' | 'listHeight' | 'maxSelected' | 'className'
+  'options' | 'searchPlaceholder' | 'noResultsText' | 'listHeight' | 'maxSelected' | 'className' | 'searchInputProps'
 > & {
   value: SelectOption[];
   onChange: (selected: SelectOption[]) => void;

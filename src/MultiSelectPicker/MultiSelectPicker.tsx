@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { SelectOption } from '../types';
+import type { InputPassthroughProps, SelectOption } from '../types';
 import { useFilteredOptions } from '../hooks/useFilteredOptions';
 import { SelectedTags } from '../internal/SelectedTags';
 
@@ -12,6 +12,8 @@ export type MultiSelectPickerProps = {
   listHeight?: number | string;
   maxSelected?: number;
   className?: string;
+  /** 検索欄へ渡す任意のクラス・属性（baserCMS 等の input スタイル用） */
+  searchInputProps?: InputPassthroughProps;
 };
 
 export const MultiSelectPicker = ({
@@ -23,6 +25,7 @@ export const MultiSelectPicker = ({
   listHeight = 350,
   maxSelected,
   className = '',
+  searchInputProps = { className: 'bca-textbox__input' },
 }: MultiSelectPickerProps) => {
   const [query, setQuery] = useState('');
 
@@ -44,8 +47,9 @@ export const MultiSelectPicker = ({
     <div className={`bca-multi-select-picker ${className}`.trim()}>
       <div className="bca-multi-select-picker__search">
         <input
+          {...searchInputProps}
           type="text"
-          className="bca-multi-select-picker__search-input"
+          className={`bca-multi-select-picker__search-input ${searchInputProps?.className ?? ''}`.trim()}
           placeholder={searchPlaceholder}
           value={query}
           onChange={(event) => setQuery(event.target.value)}

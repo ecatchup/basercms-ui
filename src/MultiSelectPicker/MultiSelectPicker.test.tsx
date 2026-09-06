@@ -90,3 +90,25 @@ describe('MultiSelectPicker（disabled オプション）', () => {
     expect(item).toHaveAttribute('aria-disabled');
   });
 });
+
+describe('MultiSelectPicker（searchInputProps）', () => {
+  it('検索欄には既定で bca-textbox__input が付く', () => {
+    render(<MultiSelectPicker options={options} value={[]} onChange={vi.fn()} />);
+    expect(screen.getByPlaceholderText('検索...')).toHaveClass('bca-textbox__input');
+  });
+
+  it('searchInputProps を渡すと既定の bca-textbox__input は消え、渡した内容で置き換わる', () => {
+    render(
+      <MultiSelectPicker
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        searchInputProps={{ className: 'my-search' }}
+      />
+    );
+    const input = screen.getByPlaceholderText('検索...');
+    expect(input).not.toHaveClass('bca-textbox__input');
+    expect(input).toHaveClass('my-search');
+    expect(input).toHaveClass('bca-multi-select-picker__search-input');
+  });
+});

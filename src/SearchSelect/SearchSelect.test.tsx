@@ -170,4 +170,43 @@ describe('SearchSelect', () => {
     await userEvent.click(screen.getByRole('combobox'));
     expect(screen.getByPlaceholderText('会社名で検索')).toBeInTheDocument();
   });
+
+  it('トリガーには既定で bca-textbox__input と bca-search-select__trigger の両方のクラスが付く', () => {
+    render(<SearchSelect options={options} value={null} onChange={vi.fn()} />);
+    const trigger = screen.getByRole('combobox');
+    expect(trigger).toHaveClass('bca-textbox__input');
+    expect(trigger).toHaveClass('bca-search-select__trigger');
+  });
+
+  it('triggerProps を渡すと既定の bca-textbox__input は消え、渡した内容で置き換わる', () => {
+    render(
+      <SearchSelect options={options} value={null} onChange={vi.fn()} triggerProps={{ className: 'my-trigger' }} />
+    );
+    const trigger = screen.getByRole('combobox');
+    expect(trigger).not.toHaveClass('bca-textbox__input');
+    expect(trigger).toHaveClass('my-trigger');
+    expect(trigger).toHaveClass('bca-search-select__trigger');
+  });
+
+  it('triggerProps に onClick/role を無理やり渡しても部品側の開閉制御が壊れない', async () => {
+    const rogueOnClick = vi.fn();
+    render(
+      <SearchSelect
+        options={options}
+        value={null}
+        onChange={vi.fn()}
+        triggerProps={{ onClick: rogueOnClick, role: 'button' } as never}
+      />
+    );
+    const trigger = screen.getByRole('combobox');
+    await userEvent.click(trigger);
+    expect(rogueOnClick).not.toHaveBeenCalled();
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+  });
+
+  it('検索欄には既定で bca-textbox__input が付く', async () => {
+    render(<SearchSelect options={options} value={null} onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('combobox'));
+    expect(screen.getByPlaceholderText('検索...')).toHaveClass('bca-textbox__input');
+  });
 });
