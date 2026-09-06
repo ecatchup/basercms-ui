@@ -4,20 +4,20 @@ import { SearchSelect, MultiSelectField, MultiSelectPicker } from '../src';
 import type { SelectOption } from '../src';
 
 const groups: SelectOption[] = [
-  { id: '1', label: '管理者', sublabel: 'managers' },
-  { id: '2', label: '利用者', sublabel: 'employee' },
-  { id: '3', label: '（株）学研ビジネスブレインズ（正社員）', sublabel: 'com_rft_A023' },
-  { id: '4', label: '（株）学研エデュケーショナル', sublabel: 'com_3000' },
-  { id: '5', label: '10_学研正社員', sublabel: 'gw_10_syain' },
-  { id: '6', label: '19_グループ会社正社員', sublabel: 'gw_19_group_seisyain' },
+  { id: '1', label: '管理者', sublabel: 'admin' },
+  { id: '2', label: '一般ユーザー', sublabel: 'member' },
+  { id: '3', label: '営業部', sublabel: 'sales' },
+  { id: '4', label: '開発部', sublabel: 'dev' },
+  { id: '5', label: '人事部', sublabel: 'hr' },
+  { id: '6', label: 'マーケティング部', sublabel: 'marketing' },
 ];
 
 const users: SelectOption[] = [
-  { id: '10', label: '（株）学研プロダクツサポート' },
-  { id: '11', label: '（株）Gakken' },
-  { id: '12', label: '（株）Gakken LEAP' },
-  { id: '13', label: '（株）Gakken LX' },
-  { id: '14', label: '（株）Gakken SEED' },
+  { id: '10', label: '山田太郎' },
+  { id: '11', label: '佐藤花子' },
+  { id: '12', label: '鈴木一郎' },
+  { id: '13', label: 'たなかゆき' },
+  { id: '14', label: '株式会社サンプル' },
 ];
 
 const Demo = () => {
