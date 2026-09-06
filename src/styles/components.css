@@ -121,10 +121,11 @@
 }
 
 .bca-search-select__dropdown {
-  /* position: absolute でトリガーを基準に配置しているため、width: 100% は
-     維持する（トリガーの幅を追従する）。トリガーが width を持たなくなった
-     0.3.0 以降も、この width はドロップダウン自身の幅をトリガーに揃える
-     ためのものであり、外すと候補一覧の幅が崩れて読めなくなる。 */
+  /* position: absolute の基準（containing block）はトリガーではなく、
+     position: relative を持つルート要素 .bca-search-select。ルート要素の幅は
+     子であるトリガーによって決まるため、width: 100% は実質トリガーの幅に一致する。
+     トリガーが width を持たなくなった 0.3.0 以降も、この width は候補一覧の幅を
+     トリガーに揃えるためのものであり、外すと幅が崩れて読めなくなる。 */
   position: absolute;
   left: 0;
   width: 100%;
