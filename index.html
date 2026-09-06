@@ -4,6 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ecatchup/basercms-ui デモ</title>
+    <style>
+      /*
+        baserCMS 管理画面の .bca-textbox__input をデモ内で再現するための CSS。
+        デモは baserCMS 環境ではないため、これを置かないと SearchSelect / 検索欄の
+        既定クラス（triggerProps / searchInputProps の既定値）を当てても見た目に
+        効果が出ない。実際の baserCMS の SCSS 定義（$button_padding_top 等の変数は
+        baserCMS 側の値なので、ここでは近似値に直値化している）をそのまま素の CSS に
+        落としたもの。このスタイルは公開パッケージ（dist）には含まれない。
+      */
+      .bca-textbox__input {
+        display: inline-block;
+        outline: none;
+        padding: 6px 0.5em 6px 0.5em;
+        border-radius: 3px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        line-height: 1.2;
+        font-size: 14px;
+        color: #333;
+        margin: 4px;
+      }
+      .bca-textbox__input:focus {
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        border-color: #007bff;
+        border-width: 1px;
+      }
+      .bca-textbox__input::placeholder {
+        color: #999;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

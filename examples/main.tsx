@@ -39,6 +39,20 @@ const Demo = () => {
       />
       <p>選択値: {user ?? '(なし)'}</p>
 
+      <h2>SearchSelect ＋ baserCMS の日付ピッカー（高さ・マージンの確認用）</h2>
+      <p>
+        baserCMS 管理画面の <code>.bca-textbox__input</code> を想定した CSS をこのデモにのみ適用している
+        （<code>index.html</code> 参照。実配布物には含まれない）。SearchSelect のトリガーは既定で
+        <code>triggerProps</code> により <code>bca-textbox__input</code> クラスが付き、隣の
+        <code>&lt;input type="date"&gt;</code> と縦位置・高さが揃うはず。
+      </p>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+        <div style={{ flex: '1 1 auto' }}>
+          <SearchSelect options={users} value={user} onChange={setUser} emptyLabel="指定なし" />
+        </div>
+        <input type="date" className="bca-textbox__input" />
+      </div>
+
       <h2>MultiSelectField（タグ形式）</h2>
       <MultiSelectField
         options={groups}

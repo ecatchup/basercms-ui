@@ -93,6 +93,36 @@ type SelectOption = {
 />
 ```
 
+## 入力欄のクラス・属性（既定で baserCMS の input スタイルが当たります）
+
+`SearchSelect` の `triggerProps` / `searchInputProps`、`MultiSelectPicker` の
+`searchInputProps` は、既定で以下の値になっています（baserCMS の
+`.bca-textbox__input` を前提にしています）。
+
+| prop | 既定値 |
+| --- | --- |
+| `triggerProps`（SearchSelect） | `{ className: 'bca-textbox__input' }` |
+| `searchInputProps`（SearchSelect） | `{ className: 'bca-textbox__input' }` |
+| `searchInputProps`（MultiSelectPicker） | `{ className: 'bca-textbox__input' }` |
+
+**既定値は「置き換え」です。マージではありません。** 何か1つでも渡すと、既定値は使われず渡した内容がそのまま使われます。既定のクラス・属性が不要な場合は空オブジェクト（`{}`）を渡してください。ただしこれで置き換わるのは追加のクラス・属性だけで、部品自身の BEM クラス（`bca-search-select__trigger` 等）は常に付くため、`{}` を渡しても部品同梱の CSS は効き続けます（baserCMS の input スタイルだけ外したい場合に使えます）。`MultiSelectDialog` / `MultiSelectField` に渡した `searchInputProps` は、内部の `MultiSelectPicker` の検索欄へそのまま転送されます。`type` / `value` / `onChange` / `placeholder` / `disabled`（`triggerProps` では加えて `role` / `tabIndex` / `onClick` / `onKeyDown` / ARIA 属性）は部品側が制御するため渡せません。
+
+```tsx
+// baserCMS 以外の見た目にしたい場合
+<SearchSelect
+  triggerProps={{ className: 'my-trigger' }}
+  searchInputProps={{ className: 'my-search-input' }}
+  ...
+/>
+
+// 何も付けたくない場合
+<SearchSelect
+  triggerProps={{}}
+  searchInputProps={{}}
+  ...
+/>
+```
+
 ## フォーム連携
 
 `name` を渡すと hidden input を描画します。
