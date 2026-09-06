@@ -78,6 +78,8 @@ export const MultiSelectPicker = ({
                   tabIndex={isUnavailable ? -1 : 0}
                   onClick={() => add(option)}
                   onKeyDown={(event) => {
+                    // IME 変換中の Enter/Space は変換の確定操作であり、候補の選択操作ではない。
+                    if (event.nativeEvent.isComposing) return;
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
                       add(option);

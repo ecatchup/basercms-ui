@@ -48,6 +48,8 @@ export const MultiSelectDialog = ({
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      // IME 変換中の Escape は変換のキャンセル操作であり、ダイアログを閉じる操作ではない。
+      if (event.isComposing) return;
       if (event.key === 'Escape') onCancel();
     };
     document.addEventListener('keydown', onKeyDown);

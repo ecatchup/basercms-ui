@@ -76,6 +76,9 @@ export const SearchSelect = ({
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (disabled) return;
+    // IME の変換確定・変換キャンセルの Enter/Escape はコンポーネント側の操作として扱わない
+    // （keydown は composition 中にも発火し、確定/キャンセルのつもりが選択や close に化けるため）。
+    if (event.nativeEvent.isComposing) return;
     // クリアボタンの Enter によるネイティブ click を横取りしないための早期 return。
     // ただし Escape だけは、フォーカスがクリアボタン上にあっても常にドロップダウンを閉じられるようにする。
     if (event.key !== 'Escape' && (event.target as HTMLElement).closest('.cui-select__clear')) return;

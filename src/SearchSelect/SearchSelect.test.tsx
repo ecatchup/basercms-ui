@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SearchSelect } from './SearchSelect';
 import type { SelectOption } from '../types';
@@ -150,6 +150,17 @@ describe('SearchSelect', () => {
     screen.getByRole('button', { name: '選択を解除' }).focus();
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('IME 変換確定中の Enter ではドロップダウンが閉じず、onChange も呼ばれない', async () => {
+    const onChange = vi.fn();
+    render(<SearchSelect options={options} value={null} onChange={onChange} />);
+    await userEvent.click(screen.getByRole('combobox'));
+    const searchInput = screen.getByPlaceholderText('検索...');
+    searchInput.focus();
+    fireEvent.keyDown(searchInput, { key: 'Enter', isComposing: true });
+    expect(onChange).not.toHaveBeenCalled();
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
   it('searchPlaceholder を渡すとその文言が検索欄に出る', async () => {

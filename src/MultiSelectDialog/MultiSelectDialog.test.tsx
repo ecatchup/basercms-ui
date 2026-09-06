@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MultiSelectDialog } from './MultiSelectDialog';
 import type { SelectOption } from '../types';
@@ -67,6 +67,13 @@ describe('MultiSelectDialog', () => {
     render(<MultiSelectDialog open options={options} onSubmit={vi.fn()} onCancel={onCancel} />);
     await userEvent.keyboard('{Escape}');
     expect(onCancel).toHaveBeenCalled();
+  });
+
+  it('IME 変換確定中の Escape では onCancel が呼ばれない', () => {
+    const onCancel = vi.fn();
+    render(<MultiSelectDialog open options={options} onSubmit={vi.fn()} onCancel={onCancel} />);
+    fireEvent.keyDown(document, { key: 'Escape', isComposing: true });
+    expect(onCancel).not.toHaveBeenCalled();
   });
 
   it('閉じるボタンで onCancel が呼ばれる', async () => {
