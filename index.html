@@ -9,29 +9,37 @@
         baserCMS 管理画面の .bca-textbox__input をデモ内で再現するための CSS。
         デモは baserCMS 環境ではないため、これを置かないと SearchSelect / 検索欄の
         既定クラス（triggerProps / searchInputProps の既定値）を当てても見た目に
-        効果が出ない。実際の baserCMS の SCSS 定義（$button_padding_top 等の変数は
-        baserCMS 側の値なので、ここでは近似値に直値化している）をそのまま素の CSS に
-        落としたもの。このスタイルは公開パッケージ（dist）には含まれない。
+        効果が出ない。値は theme/admin-third/__assets/css/theme/var/ の実際の SCSS
+        変数を確認した実値（$button_padding_top: 0.7em、$button_padding_bottom: 0.6em、
+        $color_control_border_color: #ccc、$color_text_secondary: #424f44、
+        $color_text_placeholder: #c9c8c8、$color_primary: #6fa83d、
+        $focus_shadow: 0 0 4px 0px #6fa83d）をそのまま素の CSS に落としたもの。
+        このスタイルは公開パッケージ（dist）には含まれない。
+
+        font-size だけは直値（14px）にしている。baserCMS では
+        $button_font_size_medium: 1.4rem だが、これは html の font-size を 10px に
+        している baserCMS 側の前提あってのもので（1.4rem = 14px）、このデモの html は
+        そうなっていないため、rem のまま書くと 22.4px 相当になり高さが合わなくなる。
       */
       .bca-textbox__input {
         display: inline-block;
         outline: none;
-        padding: 6px 0.5em 6px 0.5em;
+        padding: 0.7em 0.5em 0.6em 0.5em;
         border-radius: 3px;
         box-sizing: border-box;
         border: 1px solid #ccc;
         line-height: 1.2;
         font-size: 14px;
-        color: #333;
+        color: #424f44;
         margin: 4px;
       }
       .bca-textbox__input:focus {
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-        border-color: #007bff;
+        box-shadow: 0 0 4px 0px #6fa83d;
+        border-color: #6fa83d;
         border-width: 1px;
       }
       .bca-textbox__input::placeholder {
-        color: #999;
+        color: #c9c8c8;
       }
     </style>
   </head>
