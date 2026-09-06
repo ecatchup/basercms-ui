@@ -47,16 +47,27 @@
 }
 
 .bca-search-select__trigger {
+  /* レイアウトに関わる宣言は部品側が通常の詳細度で保持する。
+     margin はここでは指定しない。baserCMS の .bca-textbox__input の
+     margin: 4px をそのまま効かせることで、隣に並ぶ日付ピッカー等と
+     縦位置・間隔を揃えられるようにするため。 */
   position: relative;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  padding: 4px 32px 4px 8px;
+  cursor: pointer;
+  /* ×ボタン／▼ の分の余白は部品の見た目の一部なので通常の詳細度で保持する */
+  padding-right: 32px;
+}
+
+:where(.bca-search-select__trigger) {
+  padding-top: 4px;
+  padding-left: 8px;
+  padding-bottom: 4px;
   border: 1px solid var(--bca-border);
   border-radius: var(--bca-radius);
   background-color: #fff;
-  cursor: pointer;
 }
 
 .bca-search-select__trigger[data-disabled] {
@@ -132,6 +143,12 @@
   font: inherit;
   box-sizing: border-box;
   width: 100%;
+  /* baserCMS の .bca-textbox__input の margin: 4px を打ち消す。
+     幅 100% で左右マージンが付くと親からはみ出すため、通常の詳細度で保持する */
+  margin: 0;
+}
+
+:where(.bca-search-select__search-input) {
   padding: 4px 8px;
   border: 1px solid var(--bca-border);
   border-radius: var(--bca-radius);
@@ -191,6 +208,12 @@
   font: inherit;
   box-sizing: border-box;
   width: 100%;
+  /* baserCMS の .bca-textbox__input の margin: 4px を打ち消す。
+     幅 100% で左右マージンが付くと親からはみ出すため、通常の詳細度で保持する */
+  margin: 0;
+}
+
+:where(.bca-multi-select-picker__search-input) {
   padding: 4px 30px 4px 8px;
   border: 1px solid var(--bca-border);
   border-radius: var(--bca-radius);
