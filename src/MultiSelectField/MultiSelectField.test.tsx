@@ -135,4 +135,54 @@ describe('MultiSelectField', () => {
     const remainingCandidate = screen.getByText('ゲスト').closest('li');
     expect(remainingCandidate).toHaveAttribute('aria-disabled', 'true');
   });
+
+  it('addButtonProps で渡したクラス・属性が追加ボタンに反映される（既存クラスは残る）', () => {
+    render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        addButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'add' }}
+      />
+    );
+    const button = screen.getByRole('button', { name: '追加' });
+    expect(button).toHaveClass('cui-field__add', 'bca-btn');
+    expect(button).toHaveAttribute('data-bca-btn-type', 'add');
+  });
+
+  it('submitButtonProps / cancelButtonProps がモーダルの決定・キャンセルボタンまで届く', async () => {
+    render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        submitButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'submit' }}
+        cancelButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'cancel' }}
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: '追加' }));
+    const submit = screen.getByRole('button', { name: '決定' });
+    const cancel = screen.getByRole('button', { name: 'キャンセル' });
+    expect(submit).toHaveClass('cui-dialog__button', 'cui-dialog__button--primary', 'bca-btn');
+    expect(submit).toHaveAttribute('data-bca-btn-type', 'submit');
+    expect(cancel).toHaveClass('cui-dialog__button', 'bca-btn');
+    expect(cancel).toHaveAttribute('data-bca-btn-type', 'cancel');
+  });
+
+  it('addButtonProps に onClick/disabled を無理やり渡しても部品側の挙動が壊れない', async () => {
+    const rogueOnClick = vi.fn();
+    render(
+      <MultiSelectField
+        options={options}
+        value={[]}
+        onChange={vi.fn()}
+        addButtonProps={{ onClick: rogueOnClick, disabled: true } as never}
+      />
+    );
+    const button = screen.getByRole('button', { name: '追加' });
+    expect(button).toBeEnabled();
+    await userEvent.click(button);
+    expect(rogueOnClick).not.toHaveBeenCalled();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
 });

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { SelectOption } from '../types';
+import type { ButtonPassthroughProps, SelectOption } from '../types';
 import { SelectedTags } from '../internal/SelectedTags';
 import { MultiSelectDialog } from '../MultiSelectDialog/MultiSelectDialog';
 import type { MultiSelectPickerProps } from '../MultiSelectPicker/MultiSelectPicker';
@@ -19,6 +19,12 @@ export type MultiSelectFieldProps = Pick<
   submitLabel?: string;
   cancelLabel?: string;
   requireSelection?: boolean;
+  /** 追加ボタンへ渡す任意のクラス・属性（baserCMS 等のボタンスタイル用） */
+  addButtonProps?: ButtonPassthroughProps;
+  /** モーダルの決定ボタンへそのまま転送する（baserCMS 等のボタンスタイル用） */
+  submitButtonProps?: ButtonPassthroughProps;
+  /** モーダルのキャンセルボタンへそのまま転送する（baserCMS 等のボタンスタイル用） */
+  cancelButtonProps?: ButtonPassthroughProps;
 };
 
 /**
@@ -39,6 +45,9 @@ export const MultiSelectField = ({
   submitLabel,
   cancelLabel,
   requireSelection,
+  addButtonProps,
+  submitButtonProps,
+  cancelButtonProps,
   ...pickerProps
 }: MultiSelectFieldProps) => {
   const [open, setOpen] = useState(false);
@@ -72,8 +81,9 @@ export const MultiSelectField = ({
 
       <div className="cui-field__actions">
         <button
+          {...addButtonProps}
           type="button"
-          className="cui-field__add"
+          className={`cui-field__add ${addButtonProps?.className ?? ''}`.trim()}
           disabled={disabled || reachedMax}
           onClick={() => setOpen(true)}
         >
@@ -91,6 +101,8 @@ export const MultiSelectField = ({
         submitLabel={submitLabel}
         cancelLabel={cancelLabel}
         requireSelection={requireSelection}
+        submitButtonProps={submitButtonProps}
+        cancelButtonProps={cancelButtonProps}
         {...pickerProps}
       />
     </div>

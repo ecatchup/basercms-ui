@@ -61,6 +61,24 @@ type SelectOption = {
 
 モーダルは Escape キー・閉じるボタン（×）・キャンセルボタンで閉じます。誤操作防止のため、オーバーレイ（背景）のクリックでは閉じません。開いている間はフォーカスがモーダル内に閉じ込められます（Tab / Shift+Tab で外へ出ません）。
 
+## 既存のデザインシステムのボタンスタイルを当てたい場合
+
+baserCMS 等、既存のデザインシステムのボタンにクラス・data 属性を渡したい場合、
+`MultiSelectField` の `addButtonProps`、`MultiSelectDialog` の `submitButtonProps` /
+`cancelButtonProps` にオブジェクトを渡してください（`MultiSelectField` に渡した
+`submitButtonProps` / `cancelButtonProps` はモーダルへそのまま転送されます）。渡した
+`className` は部品側のクラスを置き換えず、後ろに連結されます。`type` / `onClick` /
+`disabled` は部品側が制御するため渡せません。
+
+```tsx
+<MultiSelectField
+  addButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'add' }}
+  submitButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'submit' }}
+  cancelButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'cancel' }}
+  ...
+/>
+```
+
 ## フォーム連携
 
 `name` を渡すと hidden input を描画します。

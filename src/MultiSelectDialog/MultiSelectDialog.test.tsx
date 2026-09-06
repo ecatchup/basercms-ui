@@ -145,4 +145,23 @@ describe('MultiSelectDialog', () => {
     // ダイアログの外へフォーカスが抜けていないことも確認する
     expect(dialog.contains(document.activeElement)).toBe(true);
   });
+
+  it('submitButtonProps / cancelButtonProps で渡したクラス・属性が反映される（既存クラスは残る）', () => {
+    render(
+      <MultiSelectDialog
+        open
+        options={options}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'submit' }}
+        cancelButtonProps={{ className: 'bca-btn', 'data-bca-btn-type': 'cancel' }}
+      />
+    );
+    const submit = screen.getByRole('button', { name: '決定' });
+    const cancel = screen.getByRole('button', { name: 'キャンセル' });
+    expect(submit).toHaveClass('cui-dialog__button', 'cui-dialog__button--primary', 'bca-btn');
+    expect(submit).toHaveAttribute('data-bca-btn-type', 'submit');
+    expect(cancel).toHaveClass('cui-dialog__button', 'bca-btn');
+    expect(cancel).toHaveAttribute('data-bca-btn-type', 'cancel');
+  });
 });

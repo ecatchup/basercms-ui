@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { SelectOption } from '../types';
+import type { ButtonPassthroughProps, SelectOption } from '../types';
 import { MultiSelectPicker } from '../MultiSelectPicker/MultiSelectPicker';
 import type { MultiSelectPickerProps } from '../MultiSelectPicker/MultiSelectPicker';
 import { useFocusTrap } from '../hooks/useFocusTrap';
@@ -17,6 +17,10 @@ export type MultiSelectDialogProps = Pick<
   cancelLabel?: string;
   /** true のとき、未選択なら決定ボタンを無効にする */
   requireSelection?: boolean;
+  /** 決定ボタンへ渡す任意のクラス・属性（baserCMS 等のボタンスタイル用） */
+  submitButtonProps?: ButtonPassthroughProps;
+  /** キャンセルボタンへ渡す任意のクラス・属性（baserCMS 等のボタンスタイル用） */
+  cancelButtonProps?: ButtonPassthroughProps;
 };
 
 export const MultiSelectDialog = ({
@@ -29,6 +33,8 @@ export const MultiSelectDialog = ({
   submitLabel = '決定',
   cancelLabel = 'キャンセル',
   requireSelection = true,
+  submitButtonProps,
+  cancelButtonProps,
   className = '',
   ...pickerProps
 }: MultiSelectDialogProps) => {
@@ -96,12 +102,18 @@ export const MultiSelectDialog = ({
         </div>
 
         <div className="cui-dialog__footer">
-          <button type="button" className="cui-dialog__button" onClick={onCancel}>
+          <button
+            {...cancelButtonProps}
+            type="button"
+            className={`cui-dialog__button ${cancelButtonProps?.className ?? ''}`.trim()}
+            onClick={onCancel}
+          >
             {cancelLabel}
           </button>
           <button
+            {...submitButtonProps}
             type="button"
-            className="cui-dialog__button cui-dialog__button--primary"
+            className={`cui-dialog__button cui-dialog__button--primary ${submitButtonProps?.className ?? ''}`.trim()}
             disabled={!canSubmit}
             onClick={() => onSubmit(selected)}
           >
