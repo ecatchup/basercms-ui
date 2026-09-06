@@ -15,7 +15,7 @@ export type MultiSelectFieldProps = Pick<
   /**
    * 選択が 0 件でもキーを送るための hidden の name。
    * 既定は name の末尾の `[]` を除いたもの（PHP / Rails 等の配列記法に対応）。
-   * false を渡すと出力しない。
+   * false を渡すと出力しない。空文字（""）を渡した場合も false と同じく出力しない。
    */
   emptyName?: string | false;
   addButtonLabel?: string;
