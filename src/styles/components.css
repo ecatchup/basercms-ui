@@ -100,6 +100,29 @@
   cursor: not-allowed;
 }
 
+/* 幅の実測用。高さ 0・overflow: hidden で描画はされないが、
+   内容幅の計算には参加する為、トリガーの幅が「最も長い選択肢」に一致する。
+   ドロップダウンの選択中の項目は font-weight: 700 で描画される為、
+   ここも太字にして測る（細い字で測ると本番で折り返す）。 */
+.bca-search-select__sizer {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+}
+
+.bca-search-select__sizer > span {
+  display: block;
+  white-space: nowrap;
+}
+
+/* 文字列はテキストノードではなく data 属性から描画する。
+   DOM 上のテキストが重複しない為、利用側のテスト（getByText 等）を壊さない。 */
+.bca-search-select__sizer > span::after {
+  content: attr(data-text);
+}
+
 /* 省略表示はトリガー自身が行う。ここの宣言は、利用側が triggerProps 経由で
    display: flex を指定した場合にラベルが正しく縮む為のもので、
    flex でなければ flex / min-width は無視される。 */

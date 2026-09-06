@@ -49,17 +49,30 @@ const Demo = () => {
       />
       <p>選択値: {user ?? '(なし)'}</p>
 
-      <h2>SearchSelect の幅（0.4.0〜: 調整点はルート要素の幅ひとつ）</h2>
+      <h2>SearchSelect の幅（0.5.0〜: 既定は「最も長い選択肢」の幅）</h2>
       <p>
-        0.4.0 からルート要素の既定は <code>display: inline-block</code>（＝内容幅）で、
+        ルート要素の既定は <code>display: inline-block</code> で、幅は最も長い選択肢に合わせた
+        内容幅になる（ネイティブの <code>&lt;select&gt;</code> と同じ）。選択を変えても幅は変わらず、
+        ドロップダウンの項目も折り返さない。<code>sizeToLongestOption={'{'}false{'}'}</code> を渡すと
+        選択中のラベルの長さに応じて変わる挙動になる。
         部品が親要素いっぱいに広がることはない。幅いっぱいにしたい場合は
         <code>className</code>（このデモでは <code>demo-full-width</code>、README 参照）で
         ルート要素の幅を指定すれば、トリガーもドロップダウンも一緒に追従する。
         下は「ラベルの右」「テーブルのセル内」という、幅の扱いが逆になる2つの文脈を並べたもの。
       </p>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <span style={{ width: 160 }}>既定（内容幅）:</span>
+        <span style={{ width: 160 }}>既定（最長の選択肢）:</span>
         <SearchSelect options={users} value={user} onChange={setUser} emptyLabel="指定なし" />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+        <span style={{ width: 160 }}>選択中のラベル幅:</span>
+        <SearchSelect
+          options={users}
+          value={user}
+          onChange={setUser}
+          emptyLabel="指定なし"
+          sizeToLongestOption={false}
+        />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
         <span style={{ width: 160 }}>className で幅いっぱい:</span>

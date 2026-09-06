@@ -1,6 +1,6 @@
 {
   "name": "@ecatchup/basercms-ui",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "検索付きの選択UIコンポーネント集",
   "type": "module",
   "license": "MIT",

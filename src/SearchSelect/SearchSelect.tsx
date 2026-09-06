@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import type { InputPassthroughProps, SelectOption, TriggerPassthroughProps } from '../types';
 import { useFilteredOptions } from '../hooks/useFilteredOptions';
@@ -25,9 +25,32 @@ export type SearchSelectProps = {
   triggerProps?: TriggerPassthroughProps;
   /** 検索欄へ渡す任意のクラス・属性（baserCMS 等の input スタイル用） */
   searchInputProps?: InputPassthroughProps;
+  /**
+   * 幅を「最も長い選択肢」に合わせる（既定 true）。
+   *
+   * ネイティブの `<select>` と同じ挙動。選択を変えても幅が変わらず、
+   * ドロップダウンの項目も折り返さない。利用側が `className` 等で明示的に
+   * 幅を指定した場合は、そちらが優先される。
+   */
+  sizeToLongestOption?: boolean;
 };
 
 const EMPTY_ID = '';
+
+/** 幅の実測用に描画する候補の数。1件だと比例フォントで最長を取り違える為、上位数件を出す */
+const SIZER_CANDIDATE_COUNT = 5;
+
+/**
+ * 表示幅の概算。全角は半角の約2倍幅として数える。
+ * 正確な幅はブラウザに測らせる（sizer）ので、ここは候補を絞る為の粗い目安でよい。
+ */
+const estimateWidth = (text: string) => {
+  let width = 0;
+  for (const char of text) {
+    width += (char.codePointAt(0) ?? 0) > 0x2e80 ? 2 : 1;
+  }
+  return width;
+};
 
 export const SearchSelect = ({
   options,
@@ -44,6 +67,7 @@ export const SearchSelect = ({
   className = '',
   triggerProps = { className: 'bca-textbox__input' },
   searchInputProps = { className: 'bca-textbox__input' },
+  sizeToLongestOption = true,
 }: SearchSelectProps) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -53,6 +77,20 @@ export const SearchSelect = ({
   const triggerRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const getOptionId = (id: string) => `${listId}-option-${id || '__empty__'}`;
+
+  // 幅の実測用。全選択肢を描画すると件数が多い場合に重い為、
+  // 概算で上位数件に絞ってからブラウザに測らせる。
+  const sizerLabels = useMemo(() => {
+    if (!sizeToLongestOption) return [];
+    const candidates = options.map((option) =>
+      option.sublabel ? `${option.label} (${option.sublabel})` : option.label
+    );
+    if (emptyLabel) candidates.push(emptyLabel);
+    if (placeholder) candidates.push(placeholder);
+    return candidates
+      .sort((a, b) => estimateWidth(b) - estimateWidth(a))
+      .slice(0, SIZER_CANDIDATE_COUNT);
+  }, [options, emptyLabel, placeholder, sizeToLongestOption]);
 
   const filtered = useFilteredOptions(options, query);
   const items: SelectOption[] = emptyLabel ? [{ id: EMPTY_ID, label: emptyLabel }, ...filtered] : filtered;
@@ -134,6 +172,19 @@ export const SearchSelect = ({
         <span className={selected ? 'bca-search-select__value' : 'bca-search-select__placeholder'}>
           {selected ? selected.label : placeholder}
         </span>
+        {sizerLabels.length > 0 && (
+          // 高さ 0 で描画されない要素。ブラウザは幅の計算にだけこれを使う為、
+          // トリガーの内容幅が「最も長い選択肢」に一致する。
+          // ドロップダウンはルート要素（＝トリガー）の幅に追従する為、項目も折り返さない。
+          <span className="bca-search-select__sizer" aria-hidden="true">
+            {sizerLabels.map((label, index) => (
+              // 文字列は data 属性で渡し、CSS の content: attr() で描画する。
+              // テキストノードとして重複させると、利用側のテストで
+              // getByText がプレースホルダ等と二重にヒットしてしまう為。
+              <span key={index} data-text={label} />
+            ))}
+          </span>
+        )}
         {!disabled && clearable && value ? (
           <button
             type="button"

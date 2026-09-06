@@ -209,4 +209,37 @@ describe('SearchSelect', () => {
     await userEvent.click(screen.getByRole('combobox'));
     expect(screen.getByPlaceholderText('検索...')).toHaveClass('bca-textbox__input');
   });
+
+  it('既定で幅の実測用要素を描画し、最も長い選択肢を含む', () => {
+    const { container } = render(
+      <SearchSelect options={options} value={null} onChange={vi.fn()} emptyLabel="指定なし" />
+    );
+    const sizer = container.querySelector('.bca-search-select__sizer');
+    expect(sizer).not.toBeNull();
+    // 全角を2倍幅として数えた最長候補（sublabel 込み）が含まれる。
+    // 文字列はテキストノードではなく data-text（CSS の content: attr() で描画）で持つ
+    const texts = Array.from(sizer!.querySelectorAll('span')).map((span) => span.getAttribute('data-text'));
+    expect(texts).toContain('（株）学研プロダクツサポート (products)');
+    expect(sizer).toHaveTextContent('');
+    // トリガーの中に置くことで、トリガー自身の内容幅が最長の選択肢に一致する
+    expect(screen.getByRole('combobox')).toContainElement(sizer as HTMLElement);
+  });
+
+  it('実測用要素はスクリーンリーダーから隠される', () => {
+    const { container } = render(<SearchSelect options={options} value={null} onChange={vi.fn()} />);
+    expect(container.querySelector('.bca-search-select__sizer')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('sizeToLongestOption を false にすると実測用要素を描画しない', () => {
+    const { container } = render(
+      <SearchSelect options={options} value={null} onChange={vi.fn()} sizeToLongestOption={false} />
+    );
+    expect(container.querySelector('.bca-search-select__sizer')).toBeNull();
+  });
+
+  it('実測用要素はドロップダウンの listbox には含まれない', async () => {
+    render(<SearchSelect options={options} value={null} onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('combobox'));
+    expect(screen.getAllByRole('option')).toHaveLength(options.length);
+  });
 });
