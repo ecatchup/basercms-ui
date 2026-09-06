@@ -27,7 +27,7 @@ const Demo = () => {
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'sans-serif' }}>
-      <h1>@ecatchup/catchup-ui デモ</h1>
+      <h1>@ecatchup/basercms-ui デモ</h1>
 
       <h2>SearchSelect（単一選択）</h2>
       <SearchSelect

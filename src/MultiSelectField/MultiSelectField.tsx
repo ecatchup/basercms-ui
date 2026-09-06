@@ -72,18 +72,18 @@ export const MultiSelectField = ({
   };
 
   return (
-    <div className={`cui-field ${className}`.trim()}>
+    <div className={`bca-multi-select-field ${className}`.trim()}>
       {name && value.map((item) => <input key={item.id} type="hidden" name={name} value={item.id} />)}
 
-      <div className="cui-field__tags">
+      <div className="bca-multi-select-field__tags">
         <SelectedTags items={value} onRemove={remove} emptyText={emptyText} disabled={disabled} />
       </div>
 
-      <div className="cui-field__actions">
+      <div className="bca-multi-select-field__actions">
         <button
           {...addButtonProps}
           type="button"
-          className={`cui-field__add ${addButtonProps?.className ?? ''}`.trim()}
+          className={`bca-multi-select-field__add ${addButtonProps?.className ?? ''}`.trim()}
           disabled={disabled || reachedMax}
           onClick={() => setOpen(true)}
         >

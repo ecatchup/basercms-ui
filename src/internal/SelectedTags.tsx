@@ -14,17 +14,17 @@ type Props = {
  */
 export const SelectedTags = ({ items, onRemove, emptyText = '選択されていません', disabled = false }: Props) => {
   if (items.length === 0) {
-    return <span className="cui-tags__empty">{emptyText}</span>;
+    return <span className="bca-selected-tags__empty">{emptyText}</span>;
   }
 
   return (
-    <ul className="cui-tags">
+    <ul className="bca-selected-tags">
       {items.map((item) => (
-        <li key={item.id} className="cui-tags__item">
-          <span className="cui-tags__label">{item.label}</span>
+        <li key={item.id} className="bca-selected-tags__item">
+          <span className="bca-selected-tags__label">{item.label}</span>
           <button
             type="button"
-            className="cui-tags__remove"
+            className="bca-selected-tags__remove"
             aria-label={`${item.label} を削除`}
             disabled={disabled}
             onClick={() => onRemove(item.id)}

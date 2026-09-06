@@ -159,9 +159,9 @@ describe('MultiSelectDialog', () => {
     );
     const submit = screen.getByRole('button', { name: '決定' });
     const cancel = screen.getByRole('button', { name: 'キャンセル' });
-    expect(submit).toHaveClass('cui-dialog__button', 'cui-dialog__button--primary', 'bca-btn');
+    expect(submit).toHaveClass('bca-multi-select-dialog__button', 'bca-multi-select-dialog__button--primary', 'bca-btn');
     expect(submit).toHaveAttribute('data-bca-btn-type', 'submit');
-    expect(cancel).toHaveClass('cui-dialog__button', 'bca-btn');
+    expect(cancel).toHaveClass('bca-multi-select-dialog__button', 'bca-btn');
     expect(cancel).toHaveAttribute('data-bca-btn-type', 'cancel');
   });
 });

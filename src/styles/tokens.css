@@ -1,8 +1,8 @@
 :root {
-  --cui-accent: #D4EDC9;
-  --cui-accent-hover: #E9F7E3;
-  --cui-border: #ccc;
-  --cui-radius: 4px;
-  --cui-font-size: 14px;
-  --cui-z-index: 9999;
+  --bca-accent: #D4EDC9;
+  --bca-accent-hover: #E9F7E3;
+  --bca-border: #ccc;
+  --bca-radius: 4px;
+  --bca-font-size: 14px;
+  --bca-z-index: 9999;
 }

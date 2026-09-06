@@ -81,7 +81,7 @@ export const SearchSelect = ({
     if (event.nativeEvent.isComposing) return;
     // クリアボタンの Enter によるネイティブ click を横取りしないための早期 return。
     // ただし Escape だけは、フォーカスがクリアボタン上にあっても常にドロップダウンを閉じられるようにする。
-    if (event.key !== 'Escape' && (event.target as HTMLElement).closest('.cui-select__clear')) return;
+    if (event.key !== 'Escape' && (event.target as HTMLElement).closest('.bca-search-select__clear')) return;
     if (event.key === 'Escape') {
       setOpen(false);
       triggerRef.current?.focus();
@@ -108,7 +108,7 @@ export const SearchSelect = ({
   };
 
   return (
-    <div ref={wrapperRef} className={`cui-select ${className}`.trim()} onKeyDown={handleKeyDown}>
+    <div ref={wrapperRef} className={`bca-search-select ${className}`.trim()} onKeyDown={handleKeyDown}>
       {name && <input type="hidden" name={name} value={value ?? ''} />}
 
       <div
@@ -120,17 +120,17 @@ export const SearchSelect = ({
         aria-controls={open ? listId : undefined}
         aria-activedescendant={open && items[activeIndex] ? getOptionId(items[activeIndex].id) : undefined}
         tabIndex={disabled ? -1 : 0}
-        className="cui-select__trigger"
+        className="bca-search-select__trigger"
         data-disabled={disabled || undefined}
         onClick={() => !disabled && setOpen(!open)}
       >
-        <span className={selected ? 'cui-select__value' : 'cui-select__placeholder'}>
+        <span className={selected ? 'bca-search-select__value' : 'bca-search-select__placeholder'}>
           {selected ? selected.label : placeholder}
         </span>
         {!disabled && clearable && value ? (
           <button
             type="button"
-            className="cui-select__clear"
+            className="bca-search-select__clear"
             aria-label="選択を解除"
             onClick={(event) => {
               event.stopPropagation();
@@ -140,19 +140,19 @@ export const SearchSelect = ({
             ×
           </button>
         ) : (
-          <span className="cui-select__arrow" aria-hidden="true">
+          <span className="bca-search-select__arrow" aria-hidden="true">
             ▼
           </span>
         )}
       </div>
 
       {open && (
-        <div className="cui-select__dropdown" data-placement={placement}>
-          <div className="cui-select__search">
+        <div className="bca-search-select__dropdown" data-placement={placement}>
+          <div className="bca-search-select__search">
             <input
               ref={searchRef}
               type="text"
-              className="cui-select__search-input"
+              className="bca-search-select__search-input"
               placeholder={searchPlaceholder}
               value={query}
               onChange={(event) => {
@@ -163,7 +163,7 @@ export const SearchSelect = ({
             />
           </div>
 
-          <ul role="listbox" id={listId} className="cui-select__list">
+          <ul role="listbox" id={listId} className="bca-search-select__list">
             {items.length > 0 ? (
               items.map((item, index) => (
                 <li
@@ -172,19 +172,19 @@ export const SearchSelect = ({
                   role="option"
                   aria-selected={item.id === (value ?? EMPTY_ID)}
                   aria-disabled={item.disabled || undefined}
-                  className="cui-select__option"
+                  className="bca-search-select__option"
                   data-active={index === activeIndex || undefined}
                   data-selected={item.id === (value ?? EMPTY_ID) || undefined}
                   data-disabled={item.disabled || undefined}
                   onMouseEnter={() => !item.disabled && setActiveIndex(index)}
                   onClick={() => !item.disabled && commit(item.id)}
                 >
-                  <span className="cui-select__label">{item.label}</span>
-                  {item.sublabel && <span className="cui-select__sublabel">{`(${item.sublabel})`}</span>}
+                  <span className="bca-search-select__label">{item.label}</span>
+                  {item.sublabel && <span className="bca-search-select__sublabel">{`(${item.sublabel})`}</span>}
                 </li>
               ))
             ) : (
-              <li className="cui-select__no-results">{noResultsText}</li>
+              <li className="bca-search-select__no-results">{noResultsText}</li>
             )}
           </ul>
         </div>

@@ -41,11 +41,11 @@ export const MultiSelectPicker = ({
   };
 
   return (
-    <div className={`cui-picker ${className}`.trim()}>
-      <div className="cui-picker__search">
+    <div className={`bca-multi-select-picker ${className}`.trim()}>
+      <div className="bca-multi-select-picker__search">
         <input
           type="text"
-          className="cui-picker__search-input"
+          className="bca-multi-select-picker__search-input"
           placeholder={searchPlaceholder}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -53,7 +53,7 @@ export const MultiSelectPicker = ({
         {query && (
           <button
             type="button"
-            className="cui-picker__search-clear"
+            className="bca-multi-select-picker__search-clear"
             aria-label="検索語をクリア"
             onClick={() => setQuery('')}
           >
@@ -62,15 +62,15 @@ export const MultiSelectPicker = ({
         )}
       </div>
 
-      <div className="cui-picker__list-wrapper" style={{ maxHeight: listHeight }}>
-        <ul className="cui-picker__list" role="listbox" aria-multiselectable="true" aria-label="選択可能な項目">
+      <div className="bca-multi-select-picker__list-wrapper" style={{ maxHeight: listHeight }}>
+        <ul className="bca-multi-select-picker__list" role="listbox" aria-multiselectable="true" aria-label="選択可能な項目">
           {candidates.length > 0 ? (
             candidates.map((option) => {
               const isUnavailable = option.disabled || reachedMax;
               return (
                 <li
                   key={option.id}
-                  className="cui-picker__option"
+                  className="bca-multi-select-picker__option"
                   role="option"
                   aria-selected={false}
                   aria-disabled={isUnavailable || undefined}
@@ -86,18 +86,18 @@ export const MultiSelectPicker = ({
                     }
                   }}
                 >
-                  <span className="cui-picker__label">{option.label}</span>
-                  {option.sublabel && <span className="cui-picker__sublabel">{`(${option.sublabel})`}</span>}
+                  <span className="bca-multi-select-picker__label">{option.label}</span>
+                  {option.sublabel && <span className="bca-multi-select-picker__sublabel">{`(${option.sublabel})`}</span>}
                 </li>
               );
             })
           ) : (
-            <li className="cui-picker__no-results">{noResultsText}</li>
+            <li className="bca-multi-select-picker__no-results">{noResultsText}</li>
           )}
         </ul>
       </div>
 
-      <div className="cui-picker__selected">
+      <div className="bca-multi-select-picker__selected">
         <SelectedTags items={value} onRemove={remove} />
       </div>
     </div>

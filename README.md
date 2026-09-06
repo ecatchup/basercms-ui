@@ -1,19 +1,19 @@
-# @ecatchup/catchup-ui
+# @ecatchup/basercms-ui
 
 検索付きの選択UIコンポーネント集。React 19 以降で動作し、react / react-dom 以外の依存を持ちません。
 
 ## インストール
 
 ```bash
-npm install @ecatchup/catchup-ui
+npm install @ecatchup/basercms-ui
 ```
 
 ## 使い方
 
 ```tsx
-import { SearchSelect, MultiSelectField } from '@ecatchup/catchup-ui';
-import '@ecatchup/catchup-ui/style.css';
-import type { SelectOption } from '@ecatchup/catchup-ui';
+import { SearchSelect, MultiSelectField } from '@ecatchup/basercms-ui';
+import '@ecatchup/basercms-ui/style.css';
+import type { SelectOption } from '@ecatchup/basercms-ui';
 
 const options: SelectOption[] = [
   { id: '1', label: '管理者', sublabel: 'managers' },
@@ -94,12 +94,12 @@ CSS 変数を上書きしてください。
 
 | 変数 | 既定値 |
 | --- | --- |
-| `--cui-accent` | `#D4EDC9` |
-| `--cui-accent-hover` | `#E9F7E3` |
-| `--cui-border` | `#ccc` |
-| `--cui-radius` | `4px` |
-| `--cui-font-size` | `14px` |
-| `--cui-z-index` | `9999` |
+| `--bca-accent` | `#D4EDC9` |
+| `--bca-accent-hover` | `#E9F7E3` |
+| `--bca-border` | `#ccc` |
+| `--bca-radius` | `4px` |
+| `--bca-font-size` | `14px` |
+| `--bca-z-index` | `9999` |
 
 ## 開発
 

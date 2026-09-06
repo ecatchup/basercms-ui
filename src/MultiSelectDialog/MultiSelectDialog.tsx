@@ -81,31 +81,31 @@ export const MultiSelectDialog = ({
   const canSubmit = !requireSelection || selected.length > 0;
 
   return (
-    <div className="cui-dialog__overlay">
+    <div className="bca-multi-select-dialog__overlay">
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className={`cui-dialog ${className}`.trim()}
+        className={`bca-multi-select-dialog ${className}`.trim()}
       >
-        <div className="cui-dialog__header">
-          <span className="cui-dialog__title">{title}</span>
-          <button type="button" className="cui-dialog__close" aria-label="閉じる" onClick={onCancel}>
+        <div className="bca-multi-select-dialog__header">
+          <span className="bca-multi-select-dialog__title">{title}</span>
+          <button type="button" className="bca-multi-select-dialog__close" aria-label="閉じる" onClick={onCancel}>
             ×
           </button>
         </div>
 
-        <div className="cui-dialog__body">
+        <div className="bca-multi-select-dialog__body">
           <MultiSelectPicker options={options} value={selected} onChange={setSelected} {...pickerProps} />
         </div>
 
-        <div className="cui-dialog__footer">
+        <div className="bca-multi-select-dialog__footer">
           <button
             {...cancelButtonProps}
             type="button"
-            className={`cui-dialog__button ${cancelButtonProps?.className ?? ''}`.trim()}
+            className={`bca-multi-select-dialog__button ${cancelButtonProps?.className ?? ''}`.trim()}
             onClick={onCancel}
           >
             {cancelLabel}
@@ -113,7 +113,7 @@ export const MultiSelectDialog = ({
           <button
             {...submitButtonProps}
             type="button"
-            className={`cui-dialog__button cui-dialog__button--primary ${submitButtonProps?.className ?? ''}`.trim()}
+            className={`bca-multi-select-dialog__button bca-multi-select-dialog__button--primary ${submitButtonProps?.className ?? ''}`.trim()}
             disabled={!canSubmit}
             onClick={() => onSubmit(selected)}
           >

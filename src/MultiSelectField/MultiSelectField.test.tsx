@@ -146,7 +146,7 @@ describe('MultiSelectField', () => {
       />
     );
     const button = screen.getByRole('button', { name: '追加' });
-    expect(button).toHaveClass('cui-field__add', 'bca-btn');
+    expect(button).toHaveClass('bca-multi-select-field__add', 'bca-btn');
     expect(button).toHaveAttribute('data-bca-btn-type', 'add');
   });
 
@@ -163,9 +163,9 @@ describe('MultiSelectField', () => {
     await userEvent.click(screen.getByRole('button', { name: '追加' }));
     const submit = screen.getByRole('button', { name: '決定' });
     const cancel = screen.getByRole('button', { name: 'キャンセル' });
-    expect(submit).toHaveClass('cui-dialog__button', 'cui-dialog__button--primary', 'bca-btn');
+    expect(submit).toHaveClass('bca-multi-select-dialog__button', 'bca-multi-select-dialog__button--primary', 'bca-btn');
     expect(submit).toHaveAttribute('data-bca-btn-type', 'submit');
-    expect(cancel).toHaveClass('cui-dialog__button', 'bca-btn');
+    expect(cancel).toHaveClass('bca-multi-select-dialog__button', 'bca-btn');
     expect(cancel).toHaveAttribute('data-bca-btn-type', 'cancel');
   });
 
