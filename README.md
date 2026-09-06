@@ -132,6 +132,43 @@ type SelectOption = {
 <MultiSelectField name="data[User][group_ids][]" ... />   // 選択件数分の hidden
 ```
 
+## 落とし穴: 複数選択で「全部外す」と何も送信されない問題
+
+HTML フォームには、選択が 0 件だと**そのキー自体が送信されない**という性質があります。
+
+```
+2件選択 → data[User][group_ids][] = 5
+          data[User][group_ids][] = 8
+全部外す → （何も送信されない）
+```
+
+サーバー側はこれを「全部外した」のか「そもそもこのフォームにこの項目が無かった」のか区別できません。結果として、**全解除の保存ができない**という不具合になります（`SearchSelect` の単一選択は未選択でも `value=""` の hidden が常に1つ出るため、この問題は起きません）。
+
+`MultiSelectField` は `name` を渡すと、既定でこの問題を解決する「センチネル」の hidden を追加で出力します。
+
+```html
+<input type="hidden" name="data[User][group_ids]" value="">      ← センチネル（[] なし・常に出力）
+<input type="hidden" name="data[User][group_ids][]" value="5">   ← 選択分（[] あり）
+<input type="hidden" name="data[User][group_ids][]" value="8">
+```
+
+**なぜセンチネルの name から `[]` を外すのか。** `name` をそのまま（`[]` 付きの配列記法）にして空の hidden を送ると、サーバー側では `['']`（要素が1つだけの配列）として届きます。PHP の `empty($value)` はこれに対して `false`（＝値がある）を返してしまうため、必須チェックが素通りしてしまいます。`[]` を外すと、全解除時はセンチネルの `''`（空文字列）だけが届き、`empty()` は正しく `true` を返します。これは CakePHP の `FormHelper::select()`（`multiple` 指定時）が採用しているのと同じ方式です。
+
+このパッケージは、`name` の末尾に `[]` があればそれを取り除いた name をセンチネルに自動採用します。挙動を変えたい場合は `emptyName` で上書き・無効化できます。
+
+```tsx
+<MultiSelectField name="data[User][group_ids][]" ... />
+// → センチネルは自動で "data[User][group_ids]"（[] なし）
+
+<MultiSelectField name="data[User][group_ids][]" emptyName="custom_name" ... />
+// → センチネルの name を "custom_name" にする
+
+<MultiSelectField name="data[User][group_ids][]" emptyName={false} ... />
+// → センチネルを出力しない（自前でハンドリングしたい場合）
+```
+
+センチネルは選択件数に関わらず常に出力され、選択分の hidden より DOM 上で前に出ます。これも CakePHP と同じ順序で、PHP のフォーム解析では同名キーが複数あると「後に来た方が勝つ」ため、センチネルを先に出すことで、選択がある場合はその値で正しく上書きされます。
+
 ## テーマ
 
 CSS 変数を上書きしてください。

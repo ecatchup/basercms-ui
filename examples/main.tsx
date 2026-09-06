@@ -1,4 +1,4 @@
-import { StrictMode, useState } from 'react';
+import { StrictMode, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { SearchSelect, MultiSelectField, MultiSelectPicker } from '../src';
 import type { SelectOption } from '../src';
@@ -24,6 +24,16 @@ const Demo = () => {
   const [user, setUser] = useState<string | null>(null);
   const [selectedGroups, setSelectedGroups] = useState<SelectOption[]>([]);
   const [inline, setInline] = useState<SelectOption[]>([]);
+
+  // 実際に送信される hidden input を目で確認できるように、DOM から拾って表示する。
+  // センチネル（[] なし・常に出る）が先頭に、選択分（[] あり）がその後に続くはず。
+  const groupFieldRef = useRef<HTMLDivElement>(null);
+  const [groupHiddenInputs, setGroupHiddenInputs] = useState<{ name: string; value: string }[]>([]);
+
+  useEffect(() => {
+    const hidden = groupFieldRef.current?.querySelectorAll<HTMLInputElement>('input[type="hidden"]') ?? [];
+    setGroupHiddenInputs(Array.from(hidden).map((el) => ({ name: el.name, value: el.value })));
+  }, [selectedGroups]);
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'sans-serif' }}>
@@ -54,13 +64,30 @@ const Demo = () => {
       </div>
 
       <h2>MultiSelectField（タグ形式）</h2>
-      <MultiSelectField
-        options={groups}
-        value={selectedGroups}
-        onChange={setSelectedGroups}
-        name="data[User][group_ids][]"
-      />
+      <p>
+        選択を 0 件にすると、HTML フォームの性質上そのキー自体が送信されなくなる問題を、
+        このパッケージは name の末尾の <code>[]</code> を外したセンチネル hidden を
+        常に先頭へ出すことで回避している（README「落とし穴」参照）。下の一覧は
+        実際に送信される hidden input を DOM から拾って表示したもの。選択を変えて確認できる。
+      </p>
+      <div ref={groupFieldRef}>
+        <MultiSelectField
+          options={groups}
+          value={selectedGroups}
+          onChange={setSelectedGroups}
+          name="data[User][group_ids][]"
+        />
+      </div>
       <p>選択値: {selectedGroups.map((g) => g.id).join(', ') || '(なし)'}</p>
+      <p>実際に送信される hidden input（上から DOM 順。センチネルが先頭、選択分が後続）:</p>
+      <ul style={{ fontFamily: 'monospace', fontSize: 13, background: '#f5f5f5', padding: '8px 24px' }}>
+        {groupHiddenInputs.map((input, i) => (
+          <li key={i}>
+            name="{input.name}" value="{input.value}"
+            {i === 0 && ' ← センチネル（常に出る）'}
+          </li>
+        ))}
+      </ul>
 
       <h2>MultiSelectPicker（ページ直置き）</h2>
       <MultiSelectPicker options={groups} value={inline} onChange={setInline} listHeight={180} />
