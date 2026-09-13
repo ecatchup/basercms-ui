@@ -443,11 +443,11 @@
 }
 
 .bca-multi-select-field__tags {
-  padding: 10px;
-  border: 1px solid var(--bca-border);
-  border-radius: var(--bca-radius);
-  min-height: 40px;
-  box-sizing: border-box;
+  /* 枠線・余白は指定しない。部品はレイアウトを主張せず、囲みが欲しい場合は
+     利用側が className 経由で指定する（README 参照）。
+     min-height だけは残す。選択数が 0 件と1件以上で高さが大きく変わると
+     フォーム全体がガタつく為、タグ1個分の高さを最低限確保しておく。 */
+  min-height: 28px;
 }
 
 .bca-multi-select-field__actions {

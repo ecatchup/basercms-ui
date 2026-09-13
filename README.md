@@ -93,6 +93,16 @@ type SelectOption = {
 
 一方、`MultiSelectPicker` の検索欄など、モーダル内で使われる要素は従来どおり幅いっぱい（`width: 100%`）のままです。これらはモーダルという明確な幅を持つコンテナの中に置かれるため、幅いっぱいが自然な既定だからです。
 
+`MultiSelectField` の選択済みタグ欄（`.bca-multi-select-field__tags`）も、0.6.0 から枠線と余白を指定していません（`min-height: 28px` のみ）。囲みが欲しい場合は `className` を渡して利用側の CSS で指定してください。
+
+```css
+.my-tags-field .bca-multi-select-field__tags {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+```
+
 ## ボタンのクラス・属性（既定で baserCMS のボタンスタイルが当たります）
 
 `MultiSelectField` の `addButtonProps`、`MultiSelectDialog` の `submitButtonProps` /
