@@ -8,6 +8,13 @@
 }
 
 .bca-selected-tags__empty {
+  /* 未選択時は ul ごとこの span に差し替わる為、タグ（.bca-selected-tags__item）の
+     padding が効かず、テキストが囲みの上端へ寄ってしまう。
+     タグと同じ縦の余白を与えて、選択の有無でテキストの縦位置が動かないようにする。
+     横の余白はタグ側の 10px を付けない（タグは丸い囲みの内側の余白だが、
+     こちらは囲みが無く、付けると左端がタグとずれる為）。 */
+  display: inline-block;
+  padding: 5px 0;
   color: #999;
   font-size: var(--bca-font-size);
 }
