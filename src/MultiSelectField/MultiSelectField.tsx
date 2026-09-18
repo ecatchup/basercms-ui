@@ -22,6 +22,7 @@ export type MultiSelectFieldProps = Pick<
   dialogTitle?: string;
   emptyText?: string;
   disabled?: boolean;
+  /** 全て選択ボタンを表示する（既定 true） */
   allowSelectAll?: boolean;
   selectAllLabel?: string;
   submitLabel?: string;

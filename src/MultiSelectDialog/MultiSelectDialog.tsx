@@ -15,7 +15,7 @@ export type MultiSelectDialogProps = Pick<
   onCancel: () => void;
   submitLabel?: string;
   cancelLabel?: string;
-  /** 全て選択ボタンを表示する */
+  /** 全て選択ボタンを表示する（既定 true） */
   allowSelectAll?: boolean;
   /** 全て選択ボタンの文言 */
   selectAllLabel?: string;
@@ -36,7 +36,7 @@ export const MultiSelectDialog = ({
   onCancel,
   submitLabel = '決定',
   cancelLabel = 'キャンセル',
-  allowSelectAll = false,
+  allowSelectAll = true,
   selectAllLabel = '全て選択',
   requireSelection = true,
   submitButtonProps = { className: 'bca-btn', 'data-bca-btn-type': 'save' },

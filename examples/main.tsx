@@ -147,7 +147,6 @@ const Demo = () => {
         options={groups}
         value={selectAllDemo}
         onChange={setSelectAllDemo}
-        allowSelectAll
         selectAllLabel="全て選択"
       />
       <p>選択値: {selectAllDemo.map((g) => g.label).join(', ') || '(なし)'}</p>

@@ -59,17 +59,18 @@ type SelectOption = {
 
 ## 全て選択
 
-`allowSelectAll` を渡すと、モーダルのヘッダーに「全て選択」ボタンが表示されます。選択可能な候補をまとめて追加できます。
+モーダルのヘッダーには、既定で「全て選択」ボタンが表示されます。選択可能な候補をまとめて追加できます。
 
 ```tsx
 <MultiSelectField
   options={options}
   value={selected}
   onChange={setSelected}
-  allowSelectAll
   selectAllLabel="全て選択"
 />
 ```
+
+全て選択ボタンを表示したくない場合は `allowSelectAll={false}` を指定してください。
 
 `maxSelected` を併用した場合は、残り枠を超えない範囲でだけ一括追加されます。
 
