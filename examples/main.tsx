@@ -23,6 +23,7 @@ const users: SelectOption[] = [
 const Demo = () => {
   const [user, setUser] = useState<string | null>(null);
   const [selectedGroups, setSelectedGroups] = useState<SelectOption[]>([]);
+  const [selectAllDemo, setSelectAllDemo] = useState<SelectOption[]>([]);
   const [inline, setInline] = useState<SelectOption[]>([]);
 
   // 実際に送信される hidden input を目で確認できるように、DOM から拾って表示する。
@@ -140,6 +141,16 @@ const Demo = () => {
           </li>
         ))}
       </ul>
+
+      <h2>MultiSelectField（全て選択）</h2>
+      <MultiSelectField
+        options={groups}
+        value={selectAllDemo}
+        onChange={setSelectAllDemo}
+        allowSelectAll
+        selectAllLabel="全て選択"
+      />
+      <p>選択値: {selectAllDemo.map((g) => g.label).join(', ') || '(なし)'}</p>
 
       <h2>MultiSelectPicker（ページ直置き）</h2>
       <MultiSelectPicker options={groups} value={inline} onChange={setInline} listHeight={180} />

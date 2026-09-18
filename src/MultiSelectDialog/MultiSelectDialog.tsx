@@ -15,6 +15,10 @@ export type MultiSelectDialogProps = Pick<
   onCancel: () => void;
   submitLabel?: string;
   cancelLabel?: string;
+  /** 全て選択ボタンを表示する */
+  allowSelectAll?: boolean;
+  /** 全て選択ボタンの文言 */
+  selectAllLabel?: string;
   /** true のとき、未選択なら決定ボタンを無効にする */
   requireSelection?: boolean;
   /** 決定ボタンへ渡す任意のクラス・属性（baserCMS 等のボタンスタイル用） */
@@ -32,10 +36,13 @@ export const MultiSelectDialog = ({
   onCancel,
   submitLabel = '決定',
   cancelLabel = 'キャンセル',
+  allowSelectAll = false,
+  selectAllLabel = '全て選択',
   requireSelection = true,
   submitButtonProps = { className: 'bca-btn', 'data-bca-btn-type': 'save' },
   cancelButtonProps = { className: 'bca-btn' },
   className = '',
+  maxSelected,
   ...pickerProps
 }: MultiSelectDialogProps) => {
   const [selected, setSelected] = useState<SelectOption[]>(initialValue ?? []);
@@ -79,6 +86,16 @@ export const MultiSelectDialog = ({
   if (!open) return null;
 
   const canSubmit = !requireSelection || selected.length > 0;
+  const selectableIds = new Set(selected.map((item) => item.id));
+  const eligibleOptions = options.filter((option) => !selectableIds.has(option.id) && !option.disabled);
+  const remainingSlots = maxSelected === undefined ? eligibleOptions.length : Math.max(0, maxSelected - selected.length);
+  const canSelectAll = allowSelectAll && eligibleOptions.length > 0 && remainingSlots > 0;
+
+  const handleSelectAll = () => {
+    if (!canSelectAll) return;
+    const nextSelected = [...selected, ...eligibleOptions.slice(0, remainingSlots)];
+    setSelected(nextSelected);
+  };
 
   return (
     <div className="bca-multi-select-dialog__overlay">
@@ -92,13 +109,31 @@ export const MultiSelectDialog = ({
       >
         <div className="bca-multi-select-dialog__header">
           <span className="bca-multi-select-dialog__title">{title}</span>
-          <button type="button" className="bca-multi-select-dialog__close" aria-label="閉じる" onClick={onCancel}>
-            ×
-          </button>
+          <div className="bca-multi-select-dialog__header-actions">
+            {allowSelectAll && (
+              <button
+                type="button"
+                className="bca-multi-select-dialog__select-all"
+                onClick={handleSelectAll}
+                disabled={!canSelectAll}
+              >
+                {selectAllLabel}
+              </button>
+            )}
+            <button type="button" className="bca-multi-select-dialog__close" aria-label="閉じる" onClick={onCancel}>
+              ×
+            </button>
+          </div>
         </div>
 
         <div className="bca-multi-select-dialog__body">
-          <MultiSelectPicker options={options} value={selected} onChange={setSelected} {...pickerProps} />
+          <MultiSelectPicker
+            options={options}
+            value={selected}
+            onChange={setSelected}
+            maxSelected={maxSelected}
+            {...pickerProps}
+          />
         </div>
 
         <div className="bca-multi-select-dialog__footer">

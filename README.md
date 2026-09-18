@@ -57,6 +57,22 @@ type SelectOption = {
 
 `MultiSelectPicker` / `MultiSelectDialog` / `MultiSelectField` は `maxSelected` を受け取れます。`MultiSelectField` ではこれを**累計の選択件数の上限**として扱い、上限に達すると追加ボタンが無効になります。一方、`MultiSelectPicker` / `MultiSelectDialog` を単体で使う場合、`maxSelected` はその部品自身の選択状態（`value` / `initialValue`）に対する上限であり、それ以上の追加ができなくなります。
 
+## 全て選択
+
+`allowSelectAll` を渡すと、モーダルのヘッダーに「全て選択」ボタンが表示されます。選択可能な候補をまとめて追加できます。
+
+```tsx
+<MultiSelectField
+  options={options}
+  value={selected}
+  onChange={setSelected}
+  allowSelectAll
+  selectAllLabel="全て選択"
+/>
+```
+
+`maxSelected` を併用した場合は、残り枠を超えない範囲でだけ一括追加されます。
+
 ## モーダルの挙動（MultiSelectDialog / MultiSelectField）
 
 モーダルは Escape キー・閉じるボタン（×）・キャンセルボタンで閉じます。誤操作防止のため、オーバーレイ（背景）のクリックでは閉じません。開いている間はフォーカスがモーダル内に閉じ込められます（Tab / Shift+Tab で外へ出ません）。

@@ -45,6 +45,26 @@ describe('MultiSelectDialog', () => {
     expect(onSubmit).toHaveBeenCalledWith([]);
   });
 
+  it('allowSelectAll が true なら候補をまとめて選択できる', async () => {
+    const onSubmit = vi.fn();
+    render(
+      <MultiSelectDialog
+        open
+        options={options}
+        onSubmit={onSubmit}
+        onCancel={vi.fn()}
+        allowSelectAll
+        selectAllLabel="全て選択"
+      />
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: '全て選択' }));
+    expect(screen.getByRole('button', { name: '決定' })).toBeEnabled();
+    await userEvent.click(screen.getByRole('button', { name: '決定' }));
+
+    expect(onSubmit).toHaveBeenCalledWith(options);
+  });
+
   it('キャンセルでは onSubmit を呼ばず onCancel を呼ぶ', async () => {
     const onSubmit = vi.fn();
     const onCancel = vi.fn();

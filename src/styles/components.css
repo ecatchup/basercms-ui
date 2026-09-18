@@ -394,13 +394,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 8px 12px;
   border-bottom: 1px solid var(--bca-border);
   background-color: #f5f5f5;
 }
 
+.bca-multi-select-dialog__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .bca-multi-select-dialog__title {
   font-weight: bold;
+}
+
+:where(.bca-multi-select-dialog__select-all) {
+  font: inherit;
+  border: 1px solid var(--bca-border);
+  border-radius: var(--bca-radius);
+  background-color: #fff;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.bca-multi-select-dialog__select-all:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 :where(.bca-multi-select-dialog__close) {
